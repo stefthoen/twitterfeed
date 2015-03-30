@@ -72,8 +72,6 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 	if ( !empty( $tweets ) ) {
 		$html .= '<ul class="tweets">';
 
-/* <a href="#" class="tweet__time">about 1 hour ago</a> */
-/* </li> */
 		foreach ( $tweets as $tweet ) {
 			$html .= sprintf( 
 				'<li class="tweet">
