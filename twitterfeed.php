@@ -26,19 +26,31 @@
 // Include Twitter API Client
 require_once( 'class-wp-twitter-api.php' );
 
-function bbbw_twitter_feed() {
-	
-	// Set your personal data retrieved at https://dev.twitter.com/apps
-	$credentials = array(
-		'consumer_key' => 'rs7gTbvTzo6vOvC4TxBwdlAo0',
-		'consumer_secret' => 'szRolpOfaNvqplwQz8mpvacwPikTCem5vIb2SetvtMw2OwtnCL'
+/**
+ * Show Twitter feed.
+ *
+ * @param array $args 
+ *   @param int $number_of_tweets Number of tweets
+ */
+function bbbw_twitter_feed( $credentials, $user_args ) {
+
+	static $default_args = array(
+		'number_of_tweets' => 5
 	);
 
-	// Let's instantiate Wp_Twitter_Api with your credentials
-	$twitter_api = new Wp_Twitter_Api( $credentials );
+	$args = array_merge( $default_args, $user_args );
 
-	// Example a - Retrieve last 5 tweets from my timeline (default type statuses/user_timeline)
-	$query = 'count=5&include_entities=true&include_rts=true&exclude_replies=true&screen_name=baardbaard';
+	// Let's instantiate Wp_Twitter_Api with your credentials
+	if ( isset( $credentials ) ) {
+		$twitter_api = new Wp_Twitter_Api( $credentials );
+	} else {
+		// @todo Use better error handlings: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
+		echo 'No Twitter API credentials given.';
+		break;
+	}
+
+	$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=baardbaard',
+		$args['number_of_tweets'] );
 
 	$tweets = $twitter_api->query( $query );
 
