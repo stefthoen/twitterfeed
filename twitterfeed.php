@@ -1,13 +1,14 @@
 <?php
 /**
- * Plugin Name: Twitterfeed
+ * Plugin Name: BBBW Twitterfeed
  * Description: Gives you a minimal Twitter feed.
  * Version: 1.0.0
- * Author: Stef Thoen
- * Author URI: http://baardbaard.nl
- * Text Domain: twitterfeed
+ * Author: Stef Thoen, Bram Willemse
+ * Author URI: http://baardbaard.nl, http://bramwillemse.nl
+ * Text Domain: bbbwtwitterfeed
  *
- * Copyright 2015  Stef Thoen  (email : stef@baardbaard.nl)
+ * Copyright 2015  Stef Thoen & Bram Willemse (email : stef@baardbaard.nl,
+ * contact@bramwillemse.nl)
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as 
@@ -17,10 +18,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 // Include Twitter API Client
