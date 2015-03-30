@@ -27,14 +27,22 @@
 require_once( 'class-wp-twitter-api.php' );
 
 /**
- * Show Twitter feed.
+ * Get users latest tweets and show them in a nice list.
  *
  * @param array $args 
- *   @param int $number_of_tweets Number of tweets
+ *   @param string $user Twitter user who's tweets we'll get
+ *   @param int $number_of_tweets Number of tweets that it gets
+ *
+ *   @todo Pretty time indication
+ *   @todo Hyperlinks in tweet texts
+ *   @todo Hyperlinks in hashtags
+ *	 @todo Use better error handling: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
+ *	 @todo HTML creating feels hacky. Needs cleaner solution.
  */
 function bbbw_twitter_feed( $credentials, $user_args ) {
 
 	static $default_args = array(
+		'user' => '',
 		'number_of_tweets' => 5
 	);
 
@@ -44,22 +52,40 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 	if ( isset( $credentials ) ) {
 		$twitter_api = new Wp_Twitter_Api( $credentials );
 	} else {
-		// @todo Use better error handlings: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
-		echo 'No Twitter API credentials given.';
+		echo 'No Twitter API credentials provided.';
 		break;
 	}
 
-	$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=baardbaard',
-		$args['number_of_tweets'] );
+	if ( empty( $args['user'] ) ) {
+		echo 'No username provided.';
+		break;
+	}
+
+	$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
+		$args['number_of_tweets'],
+		$args['user']	
+	);
 
 	$tweets = $twitter_api->query( $query );
 
+	// Build list
 	if ( !empty( $tweets ) ) {
-
 		$html .= '<ul class="tweets">';
 
+/* <a href="#" class="tweet__time">about 1 hour ago</a> */
+/* </li> */
 		foreach ( $tweets as $tweet ) {
-			$html .= sprintf( '<li class="tweet"><span class="tweet__content">%s</span></li>', $tweet->text );
+			$html .= sprintf( 
+				'<li class="tweet">
+					<a href="" class="tweet__user-photo"><img src="%s"></a>
+					<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
+					<span class="tweet__content">%s</span>
+				</li>', 
+				$tweet->user->profile_image_url_https,
+				$tweet->user->screen_name,
+				$tweet->user->name,
+				$tweet->text 
+			);
 		}
 
 		$html .= '</ul><!-- /.tweets -->';
@@ -69,6 +95,7 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 	}
 
 	echo $html;
+	print_r( $tweets );
 }
 
 ?>
