@@ -9,6 +9,7 @@ Add and activate the plugin and use the following function in your template:
 #!php
 
 <?php 
+// Use your own API credentials. These are just for show.
 $credentials = array(
 	'consumer_key' => 'rs3gTbvTzo6v8vC4Tx3wdlAo0',
 	'consumer_secret' => '3zRolaOfaNvqplwQz8mpvacwPikTCem5vIb2S5tvtMw20wtnCL'
