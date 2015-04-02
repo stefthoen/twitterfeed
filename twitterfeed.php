@@ -73,10 +73,11 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 		foreach ( $tweets as $tweet ) {
 			$html .= sprintf( 
 				'<li class="tweet">
-					<a href="" class="tweet__user-photo"><img src="%s"></a>
+					<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
 					<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
 					<span class="tweet__content">%s</span>
 				</li>', 
+				$tweet->user->screen_name,
 				$tweet->user->profile_image_url_https,
 				$tweet->user->screen_name,
 				$tweet->user->name,
