@@ -92,7 +92,6 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 	}
 
 	echo $html;
-	print_r( $tweets );
 }
 
 ?>
