@@ -37,6 +37,7 @@ require_once( 'class-wp-twitter-api.php' );
  *	 @todo HTML creating feels hacky. Needs cleaner solution.
  */
 function bbbw_twitter_feed( $credentials, $user_args ) {
+	$html = '';
 
 	static $default_args = array(
 		'user' => '',
