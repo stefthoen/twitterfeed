@@ -75,14 +75,16 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 					<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
 					<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
 					<span class="tweet__content">%s</span>
-					<a href="#" class="tweet__time">about %s ago</a>
+					<a href="#" class="tweet__time">%s</a>
 				</li>', 
 				$tweet->user->screen_name,
 				$tweet->user->profile_image_url_https,
 				$tweet->user->screen_name,
 				$tweet->user->name,
 				$tweet->text,
-				human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) )
+				_e( 'about', bbbwtwitterfeed ) . 
+				human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) ) . 
+				_e( 'ago', bbwtwitterfeed )
 			);
 		}
 
@@ -93,8 +95,6 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 	}
 
 	echo $html;
-	$tweet_date = strtotime( $tweets[0]->created_at );
-	echo human_time_diff( $tweet_date, current_time( 'timestamp' ) ) . ' ago';
 }
 
 ?>
