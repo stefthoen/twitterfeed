@@ -5,7 +5,7 @@
  * Version: 1.0.0
  * Author: Stef Thoen, Bram Willemse
  * Author URI: http://baardbaard.nl, http://bramwillemse.nl
- * Text Domain: bbbwtwitterfeed
+ * Text Domain: bbbw-twitterfeed
  *
  * Copyright 2015  Stef Thoen & Bram Willemse (email : stef@baardbaard.nl,
  * contact@bramwillemse.nl)
@@ -81,10 +81,10 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 				$tweet->user->profile_image_url_https,
 				$tweet->user->screen_name,
 				$tweet->user->name,
-				$tweet->text,
-				_e( 'about', bbbwtwitterfeed ) . 
+				$tweet->text, 
+				__( 'about', 'bbbw-twitterfeed') . ' ' .
 				human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) ) . 
-				_e( 'ago', bbwtwitterfeed )
+				' ' . __( 'ago', 'bbbw-twitterfeed')
 			);
 		}
 
