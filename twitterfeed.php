@@ -21,7 +21,7 @@
  */
 
 // Include Twitter API Client
-require_once( 'class-wp-twitter-api.php' );
+require_once( 'class/class-wp-twitter-api.php' );
 
 /**
  * Get users latest tweets and show them in a nice list.
