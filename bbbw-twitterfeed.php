@@ -6,6 +6,7 @@
  * Author: Stef Thoen, Bram Willemse
  * Author URI: http://baardbaard.nl, http://bramwillemse.nl
  * Text Domain: bbbw-twitterfeed
+ * Domain Path: /languages/
  *
  * Copyright 2015  Stef Thoen & Bram Willemse (email : stef@baardbaard.nl,
  * contact@bramwillemse.nl)
@@ -22,6 +23,12 @@
 
 // Include Twitter API Client
 require_once( 'class/class-wp-twitter-api.php' );
+
+add_action( 'init', 'bbbw_load_plugin_textdomain' );
+
+function bbbw_load_plugin_textdomain() {
+	load_plugin_textdomain( 'bbbw-twitterfeed', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
 
 /**
  * Get users latest tweets and show them in a nice list.
@@ -72,19 +79,18 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 		foreach ( $tweets as $tweet ) {
 			$html .= sprintf( 
 				'<li class="tweet">
-					<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
-					<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
-					<span class="tweet__content">%s</span>
-					<a href="#" class="tweet__time">%s</a>
+				<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
+				<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
+				<span class="tweet__content">%s</span>
+				<a href="#" class="tweet__time">%s</a>
 				</li>', 
 				$tweet->user->screen_name,
 				$tweet->user->profile_image_url_https,
 				$tweet->user->screen_name,
 				$tweet->user->name,
 				$tweet->text, 
-				__( 'about', 'bbbw-twitterfeed') . ' ' .
-				human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) ) . 
-				' ' . __( 'ago', 'bbbw-twitterfeed')
+				sprintf( __( 'about %s ago', 'bbbw-twitterfeed'),
+				human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) ) )
 			);
 		}
 
