@@ -2,7 +2,7 @@
 /**
  * Plugin Name: BBBW Twitterfeed
  * Description: Gives you a minimal Twitter feed.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Stef Thoen & Bram Willemse
  * Author URI: http://www.baardbaard.nl
  * Text Domain: bbbw-twitterfeed
