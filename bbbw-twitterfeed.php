@@ -25,7 +25,6 @@
 require_once( 'class/class-wp-twitter-api.php' );
 
 add_action( 'init', 'bbbw_load_plugin_textdomain' );
-
 function bbbw_load_plugin_textdomain() {
 	load_plugin_textdomain( 'bbbw-twitterfeed', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
