@@ -24,6 +24,11 @@
 // Include Twitter API Client
 require_once( 'class/class-wp-twitter-api.php' );
 
+// Include URL Linker
+require_once( 'kwi-urllinker/UrlLinker.php' );
+require_once( 'kwi-urllinker/lib/UrlLinkerInterface.php' );
+require_once( 'kwi-urllinker/lib/UrlLinker.php' );
+
 add_action( 'init', 'bbbw_load_plugin_textdomain' );
 function bbbw_load_plugin_textdomain() {
 	load_plugin_textdomain( 'bbbw-twitterfeed', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
@@ -87,7 +92,7 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 				$tweet->user->profile_image_url_https,
 				$tweet->user->screen_name,
 				$tweet->user->name,
-				$tweet->text, 
+				htmlEscapeAndLinkUrls( $tweet->text ), 
 				sprintf( __( 'about %s ago', 'bbbw-twitterfeed'),
 				human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) ) )
 			);
