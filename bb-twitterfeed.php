@@ -1,15 +1,14 @@
 <?php
 /**
- * Plugin Name: BBBW Twitterfeed
+ * Plugin Name: BB Twitterfeed
  * Description: Gives you a minimal Twitter feed.
  * Version: 1.0.1
- * Author: Stef Thoen & Bram Willemse
+ * Author: Stef Thoen
  * Author URI: http://www.baardbaard.nl
- * Text Domain: bbbw-twitterfeed
+ * Text Domain: bb-twitterfeed
  * Domain Path: /languages/
  *
- * Copyright 2015  Stef Thoen & Bram Willemse (email : stef@baardbaard.nl,
- * contact@bramwillemse.nl)
+ * Copyright 2015  Stef Thoen (email : stef@baardbaard.nl)
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 3, as 
