@@ -2,8 +2,20 @@
 
 Twitterfeed is a small WordPress plugin that gives you a Twitter feed without any styling.
 
-Add and activate the plugin and use the following function in your template:
+The output looks like this:
 
+```
+<ul class="tweets">
+	<li class="tweet">
+		<a href="https://www.twitter.com/baardbaard" class="tweet__user-photo"><img src="https://pbs.twimg.com/profile_images/545552771378712577/gST9ZRmm_normal.jpeg"></a>
+		<a href="https://www.twitter.com/baardbaard" class="tweet__user">Stef Thoen</a>
+		<span class="tweet__content">“Don’t let your dreams be dreams. Yesterday, you said tomorrow.”</span>
+		<span class="tweet__time">about 4 days ago</span>
+	</li>
+</ul><!-- /.tweets -->
+```
+
+Add and activate the plugin and use the following function in your template:
 
 ```
 <?php 
@@ -18,6 +30,6 @@ $args = array(
 	'number_of_tweets' => 5
 );
 
-bb_twitter_feed( $credentials, $args ); 
+bb_twitterfeed( $credentials, $args ); 
 ?>
 ```
