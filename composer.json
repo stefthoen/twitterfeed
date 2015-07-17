@@ -4,7 +4,7 @@
 	"description": "Minimal WordPress Twitterfeed plugin.",
 	"keywords": ["wordpress", "plugin"],
 	"homepage": "https://github.com/baardbaard/bb-twitterfeed",
-	"license" "MIT",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Stef Thoen",
