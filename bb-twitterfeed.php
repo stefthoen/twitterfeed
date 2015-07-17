@@ -2,7 +2,7 @@
 /**
  * Plugin Name: BB Twitterfeed
  * Description: Gives you a minimal Twitter feed.
- * Version: 1.0.1
+ * Version: 0.1
  * Author: Stef Thoen
  * Author URI: http://www.baardbaard.nl
  * Text Domain: bb-twitterfeed
@@ -28,9 +28,9 @@ require_once( 'kwi-urllinker/UrlLinker.php' );
 require_once( 'kwi-urllinker/lib/UrlLinkerInterface.php' );
 require_once( 'kwi-urllinker/lib/UrlLinker.php' );
 
-add_action( 'init', 'bbbw_load_plugin_textdomain' );
-function bbbw_load_plugin_textdomain() {
-	load_plugin_textdomain( 'bbbw-twitterfeed', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+add_action( 'init', 'bb_load_plugin_textdomain' );
+function bb_load_plugin_textdomain() {
+	load_plugin_textdomain( 'bb-twitterfeed', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 }
 
 /**
@@ -45,7 +45,7 @@ function bbbw_load_plugin_textdomain() {
  *	 @todo Use better error handling: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
  *	 @todo HTML creating feels hacky. Needs cleaner solution.
  */
-function bbbw_twitter_feed( $credentials, $user_args ) {
+function bb_twitterfeed( $credentials, $user_args ) {
 	$html = '';
 
 	static $default_args = array(
@@ -92,7 +92,7 @@ function bbbw_twitter_feed( $credentials, $user_args ) {
 				$tweet->user->screen_name,
 				$tweet->user->name,
 				htmlEscapeAndLinkUrls( $tweet->text ), 
-				sprintf( __( 'about %s ago', 'bbbw-twitterfeed'),
+				sprintf( __( 'about %s ago', 'bb-twitterfeed'),
 				human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) ) )
 			);
 		}
