@@ -2,12 +2,17 @@
 	"name": "baardbaard/bb-twitterfeed",
 	"license": "GPLv3",
 	"description": "Minimal WordPress Twitterfeed plugin.",
+	"keywords": ["wordpress", "plugin"],
 	"homepage": "https://github.com/baardbaard/bb-twitterfeed",
+	"license" "MIT",
 	"authors": [
 		{
 			"name": "Stef Thoen",
 			"email": "stef@baardbaard.nl",
 			"homepage": "http://www.baardbaard.nl"
 		}
-	]
+	],
+	"require": {
+		"php": ">=5.4"
+	}
 }
