@@ -6,8 +6,6 @@ Add and activate the plugin and use the following function in your template:
 
 
 ```
-#!php
-
 <?php 
 // Use your own API credentials. These are just for show.
 $credentials = array(
@@ -20,6 +18,6 @@ $args = array(
 	'number_of_tweets' => 5
 );
 
-bbbw_twitter_feed( $credentials, $args ); 
+bb_twitter_feed( $credentials, $args ); 
 ?>
 ```
