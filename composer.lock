@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "18ebfd466940fdb8591b4d1d20aa6376",
+    "hash": "a858c8be09548f92ad9c85e25b7f2ef3",
     "packages": [
         {
             "name": "kwi/urllinker",
