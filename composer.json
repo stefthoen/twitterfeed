@@ -12,6 +12,7 @@
 			"homepage": "http://www.baardbaard.nl"
 		}
 	],
+	"minimum-stability": "dev",
 	"require": {
 		"php": ">=5.4",
 		"kwi/urllinker": "dev-default"

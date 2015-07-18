@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a1e930bc8d156096d82c731c97eea39a",
+    "hash": "18ebfd466940fdb8591b4d1d20aa6376",
     "packages": [
         {
             "name": "kwi/urllinker",
@@ -49,12 +49,12 @@
             ],
             "description": "Autolink URLs in text or html",
             "homepage": "http://www.kwi.dk/projects/php/UrlLinker/",
-            "time": "2014-12-28 23:05:00"
+            "time": "2014-12-28 22:05:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "kwi/urllinker": 20
     },
