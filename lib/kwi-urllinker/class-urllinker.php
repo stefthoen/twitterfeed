@@ -67,7 +67,7 @@ class UrlLinker implements UrlLinkerInterface
         }
 
         if (!static::$validTlds) {
-            static::$validTlds = array_fill_keys(explode(' ', require __DIR__.'/validTlds.php'), true);
+            static::$validTlds = array_fill_keys(explode(' ', require __DIR__.'/valid-tlds.php'), true);
         }
     }
 
