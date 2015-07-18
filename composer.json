@@ -13,7 +13,6 @@
 		}
 	],
 	"require": {
-		"php": ">=5.4",
-		"kwi/urllinker": "dev-default"
+		"php": ">=5.4"
 	}
 }
