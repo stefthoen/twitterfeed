@@ -21,12 +21,12 @@
  */
 
 // Include Twitter API Client
-require_once( 'class/class-wp-twitter-api.php' );
+require_once( 'lib/class-wp-twitter-api.php' );
 
 // Include URL Linker
-require_once( 'vendor/kwi/urllinker/UrlLinker.php' );
-require_once( 'vendor/kwi/urllinker/lib/UrlLinkerInterface.php' );
-require_once( 'vendor/kwi/urllinker/lib/UrlLinker.php' );
+require_once( 'lib/urllinker/urllinker.php' );
+require_once( 'lib/urllinker/urllinker-interface.php' );
+require_once( 'lib/urllinker/class-urllinker.php' );
 
 add_action( 'init', 'bb_load_plugin_textdomain' );
 function bb_load_plugin_textdomain() {
