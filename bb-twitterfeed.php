@@ -24,9 +24,9 @@
 require_once( 'class/class-wp-twitter-api.php' );
 
 // Include URL Linker
-require_once( 'kwi-urllinker/UrlLinker.php' );
-require_once( 'kwi-urllinker/lib/UrlLinkerInterface.php' );
-require_once( 'kwi-urllinker/lib/UrlLinker.php' );
+require_once( 'vendor/kwi/urllinker/UrlLinker.php' );
+require_once( 'vendor/kwi/urllinker/lib/UrlLinkerInterface.php' );
+require_once( 'vendor/kwi/urllinker/lib/UrlLinker.php' );
 
 add_action( 'init', 'bb_load_plugin_textdomain' );
 function bb_load_plugin_textdomain() {

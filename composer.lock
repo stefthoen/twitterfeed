@@ -4,12 +4,60 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e6ef7d1f89b8cf2da2aab0ef7704ee6b",
-    "packages": [],
+    "hash": "a1e930bc8d156096d82c731c97eea39a",
+    "packages": [
+        {
+            "name": "kwi/urllinker",
+            "version": "dev-default",
+            "source": {
+                "type": "hg",
+                "url": "https://bitbucket.org/kwi/urllinker",
+                "reference": "b5e097f03963454b4e8f32581265c8e57c3409e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://bitbucket.org/kwi/urllinker/get/b5e097f03963454b4e8f32581265c8e57c3409e6.zip",
+                "reference": "b5e097f03963454b4e8f32581265c8e57c3409e6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Kwi\\": "lib"
+                },
+                "files": [
+                    "UrlLinker.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC0-1.0"
+            ],
+            "authors": [
+                {
+                    "name": "Søren Løvborg",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Dawid Nowak",
+                    "email": "code@dnowak.pl",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Autolink URLs in text or html",
+            "homepage": "http://www.kwi.dk/projects/php/UrlLinker/",
+            "time": "2014-12-28 23:05:00"
+        }
+    ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "kwi/urllinker": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
