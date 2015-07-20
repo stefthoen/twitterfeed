@@ -34,16 +34,14 @@ function bb_load_plugin_textdomain() {
 }
 
 /**
- * Get users latest tweets and show them in a nice list.
+ * Get users latest tweets and outputs an unordered list.
  *
  * @param array $args 
- *   @param string $user Twitter user who's tweets we'll get
- *   @param int $number_of_tweets Number of tweets that it gets
+ * @param string $user Twitter user who's tweets we'll get
+ * @param int $number_of_tweets Number of tweets that it gets
  *
- *   @todo Hyperlinks in tweet texts
- *   @todo Hyperlinks in hashtags
- *	 @todo Use better error handling: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
- *	 @todo HTML creating feels hacky. Needs cleaner solution.
+ * @todo Hyperlinks in hashtags and usernames
+ * @todo Use better error handling: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
  */
 function bb_twitterfeed( $credentials, $user_args ) {
 	$html = '';
