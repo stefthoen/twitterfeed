@@ -114,6 +114,7 @@ function bb_twitterfeed( $credentials, $user_args ) {
  */
 function bb_replace_hashtag_and_username_with_urls ( $subject ) {
 	$pattern_username = '/@([a-zA-z0-9]+)/';
+	$replacement_username = '<a href="https://www.twitter.com/${1}">@${1}</a>';
 
 	$pattern_hashtag = '/#([a-zA-z0-9]+)/';;
 	$replacement_hashtag = '<a href="https://www.twitter.com/hashtag/${1}">#${1}</a>';
