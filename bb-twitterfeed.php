@@ -36,12 +36,15 @@ function bb_load_plugin_textdomain() {
 /**
  * Get users latest tweets and outputs an unordered list.
  *
- * @param array $args 
- * @param string $user Twitter user who's tweets we'll get
- * @param int $number_of_tweets Number of tweets that it gets
- *
  * @todo Hyperlinks in hashtags and usernames
  * @todo Use better error handling: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
+ *
+ * @param array $credentials
+ *   @param string $consumer_key Twitter API key
+ *   @param string $consumer_secret Twitter API secret
+ * @param array $user_args 
+ *   @param string $user Twitter user who's tweets we'll get
+ *   @param int $number_of_tweets Number of tweets that it gets
  */
 function bb_twitterfeed( $credentials, $user_args ) {
 	$html = '';
@@ -89,7 +92,7 @@ function bb_twitterfeed( $credentials, $user_args ) {
 				$tweet->user->profile_image_url_https,
 				$tweet->user->screen_name,
 				$tweet->user->name,
-				htmlEscapeAndLinkUrls( $tweet->text ), 
+				bb_replace_hashtag_and_username_with_urls( htmlEscapeAndLinkUrls( $tweet->text ) ), 
 				sprintf( __( 'about %s ago', 'bb-twitterfeed'),
 				human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) ) )
 			);
@@ -102,5 +105,22 @@ function bb_twitterfeed( $credentials, $user_args ) {
 	}
 
 	echo $html;
+}
+
+/**
+ * Replaces hashtag and username with links.
+ *
+ * @param string $subject
+ */
+function bb_replace_hashtag_and_username_with_urls ( $subject ) {
+	$pattern_username = '/@([a-zA-z0-9]+)/';
+
+	$pattern_hashtag = '/#([a-zA-z0-9]+)/';;
+	$replacement_hashtag = '<a href="https://www.twitter.com/hashtag/${1}">#${1}</a>';
+
+	$subject = preg_replace( $pattern_username, $replacement_username, $subject );
+	$subject = preg_replace( $pattern_hashtag, $replacement_hashtag, $subject );
+
+	return $subject;
 }
 ?>
