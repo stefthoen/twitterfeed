@@ -2,7 +2,7 @@
 
 BB-Twitterfeed is a WordPress plugin that gives you a Twitter feed without any styling.
 
-It uses (Twitter-API-1.1-Client-for-Wordpress)[https://github.com/micc83/Twitter-API-1.1-Client-for-Wordpress/blob/master/class-wp-twitter-api.php] to connect to the Twitter api and it uses (kwi-urllinker)[https://bitbucket.org/kwi/urllinker] to find URL's in the tweets and make them anchors.
+It uses [Twitter-API-1.1-Client-for-Wordpress](https://github.com/micc83/Twitter-API-1.1-Client-for-Wordpress/blob/master/class-wp-twitter-api.php) to connect to the Twitter api and uses [kwi-urllinker](https://bitbucket.org/kwi/urllinker) to find URL's in the tweets and turn them into links.
 
 Add and activate the plugin and use the following function in your template:
 
