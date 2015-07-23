@@ -36,9 +36,6 @@ function bb_load_plugin_textdomain() {
 /**
  * Get users latest tweets and outputs an unordered list.
  *
- * @todo Hyperlinks in hashtags and usernames
- * @todo Use better error handling: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
- *
  * @param array $credentials
  *   @param string $consumer_key Twitter API key
  *   @param string $consumer_secret Twitter API secret
@@ -48,6 +45,7 @@ function bb_load_plugin_textdomain() {
  */
 function bb_twitterfeed( $credentials, $user_args ) {
 	$html = '';
+	$twitter_error = new WP_Error;
 
 	static $default_args = array(
 		'user' => '',
@@ -60,13 +58,11 @@ function bb_twitterfeed( $credentials, $user_args ) {
 	if ( isset( $credentials ) ) {
 		$twitter_api = new Wp_Twitter_Api( $credentials );
 	} else {
-		echo 'No Twitter API credentials provided.';
-		break;
+		$twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.' ) );
 	}
 
 	if ( empty( $args['user'] ) ) {
-		echo 'No username provided.';
-		break;
+		$twitter_error->add( 'username', __( 'No username provided.' ) );
 	}
 
 	$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
@@ -101,10 +97,17 @@ function bb_twitterfeed( $credentials, $user_args ) {
 		$html .= '</ul><!-- /.tweets -->';
 
 	} else {
-		$html = '<span>No tweets available.</span>';
+		$twitter_error->add( 'notweets', __( 'No tweets available.' ) );
 	}
 
-	echo $html;
+	if ( 1 > count( $twitter_error->get_error_messages() ) ) {
+		echo $html;
+	} else {
+		echo '<p>Oops, something went wrong. Please rectify these errors.</p>';
+		echo '<ul>';
+		echo '<li>' . implode( '</li><li>', $twitter_error->get_error_messages() ) . '</li>';
+		echo '</ul>';
+	}
 }
 
 /**
