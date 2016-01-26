@@ -24,7 +24,7 @@ msgstr ""
 "X-Generator: Poedit 1.7.5\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: bbbw-twitterfeed.php:94
+#: bb-twitterfeed.php:94
 #, php-format
 msgid "about %s ago"
 msgstr ""
