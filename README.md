@@ -36,3 +36,13 @@ The output looks something like this:
 </ul><!-- /.tweets -->
 ```
 
+# Roadmap
+
+## 0.2
+-  Refactor plugin to be fully OOP
+-  Hyperlinks in hashtags and usernames
+
+## 0.3
+-  Use better error handling: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
+-  Put  API credentials in a WP admin setting
+-  Use caching to save tweets
