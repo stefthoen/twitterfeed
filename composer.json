@@ -14,5 +14,8 @@
 	],
 	"require": {
 		"php": ">=5.4"
+	},
+	"require-dev": {
+		"phpdocumentor/phpdocumentor": "^2.8"
 	}
 }

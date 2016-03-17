@@ -9,11 +9,11 @@
  * Domain Path: /languages/
  *
  * Copyright 2015  Stef Thoen (email : stef@baardbaard.nl)
-
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 3, as 
  * published by the Free Software Foundation.
-
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -36,12 +36,14 @@ function bb_load_plugin_textdomain() {
 /**
  * Get users latest tweets and outputs an unordered list.
  *
- * @param array $credentials
+ * @param mixed $credentials
  *   @param string $consumer_key Twitter API key
  *   @param string $consumer_secret Twitter API secret
- * @param array $user_args 
+ * @param mixed $user_args
  *   @param string $user Twitter user who's tweets we'll get
  *   @param int $number_of_tweets Number of tweets that it gets
+ * @access public
+ * @return void
  */
 function bb_twitterfeed( $credentials, $user_args ) {
 	$html = '';
@@ -111,9 +113,11 @@ function bb_twitterfeed( $credentials, $user_args ) {
 }
 
 /**
- * Replaces hashtag and username with links.
+ * Replaces hashtag and username with links. 
  *
- * @param string $subject
+ * @param mixed $subject
+ * @access public
+ * @return void
  */
 function bb_replace_hashtag_and_username_with_urls ( $subject ) {
 	$pattern_username = '/@([a-zA-z0-9]+)/';
