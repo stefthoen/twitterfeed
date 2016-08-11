@@ -28,8 +28,8 @@ msgstr "ongeveer %s geleden"
 
 #: class/class-wp-twitter-api.php:68
 msgid "Can't get the bearer token, check your credentials"
-msgstr "Kan bearer token niet krijgen, check je inloggegevens"
+msgstr "Kan bearer token niet krijgen, controleer je inloggegevens"
 
 #: class/class-wp-twitter-api.php:124
 msgid "Bearer Token is good, check your query"
-msgstr "Bearer token is goed, check je query"
+msgstr "Bearer token is goed, controleer je query"
