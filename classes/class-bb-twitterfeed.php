@@ -31,7 +31,7 @@ class Twitterfeed {
 	}
 
 	/**
-	 * bb_load_plugin_textdomain
+	 * Load the plugin's translated strings.
 	 *
 	 * @access public
 	 * @return void
