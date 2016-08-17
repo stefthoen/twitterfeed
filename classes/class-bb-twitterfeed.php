@@ -130,7 +130,7 @@ class Twitterfeed {
 		$replacement_username = '<a href="https://www.twitter.com/${1}">@${1}</a>';
 		$text = preg_replace( $pattern_username, $replacement_username, $text );
 
-		$pattern_hashtag = '/#([a-zA-z0-9]+)/';;
+		$pattern_hashtag = '/#([a-zA-z0-9]+)/';
 		$replacement_hashtag = '<a href="https://www.twitter.com/hashtag/${1}">#${1}</a>';
 		$text = preg_replace( $pattern_hashtag, $replacement_hashtag, $text );
 
