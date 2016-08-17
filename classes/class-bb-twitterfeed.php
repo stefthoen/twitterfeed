@@ -23,10 +23,6 @@ class Twitterfeed {
 	}
 
 	private function __construct() {
-		$this->run();
-	}
-
-	private function run() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 	}
 
@@ -141,22 +137,30 @@ class Twitterfeed {
 		return $text;
 	}
 
-    private function get_profile_image_url( $url, $size = 'normal' ) {
+	/**
+	 * Gets the Twitter profile image with the correct size.
+	 *
+	 * @param string $url URL to Twitter profile image
+	 * @param string $size Size of Twitter profile image
+	 * @access private
+	 * @return string $url URL to Twitter profile image with requested size
+	 */
+	private function get_profile_image_url( $url, $size = 'normal' ) {
 
 		switch ( $size ) {
-			case 'original':
-				$url = str_replace( '_normal', '', $url );
-				break;
-			case 'mini':
-				$url = str_replace( 'normal', $size, $url );
-				break;
-			case 'bigger':
-				$url = str_replace( 'normal', $size, $url );
-				break;
-			default:
-				break;
+		case 'original':
+			$url = str_replace( '_normal', '', $url );
+			break;
+		case 'mini':
+			$url = str_replace( 'normal', $size, $url );
+			break;
+		case 'bigger':
+			$url = str_replace( 'normal', $size, $url );
+			break;
+		default:
+			break;
 		}
 
 		return $url;
-    }
+	}
 }
