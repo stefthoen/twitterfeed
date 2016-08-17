@@ -5,6 +5,7 @@ class Twitterfeed {
 	static $instance = null;
 	private $consumer_key = '';
 	private $consumer_secret = '';
+	private $twitter_error = null;
 
 	/**
 	 * Returns an instance of this class. An implementation of the singleton design pattern.
@@ -24,6 +25,7 @@ class Twitterfeed {
 
 	private function __construct() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
+		$this->twitter_error = new WP_Error;
 	}
 
 	/**
@@ -39,81 +41,14 @@ class Twitterfeed {
 	/**
 	 * Get users latest tweets and outputs an unordered list.
 	 *
-	 * @param mixed $credentials
-	 *   @param string $consumer_key Twitter API key
-	 *   @param string $consumer_secret Twitter API secret
-	 * @param mixed $user_args
-	 *   @param string $user Twitter user who's tweets we'll get
-	 *   @param int $number_of_tweets Number of tweets that it gets
+	 * @param array $credentials Twitter API key and secret
+	 * @param array $user_args   Twitter user and number of tweets
 	 * @access public
 	 * @return void
 	 */
 	public function create_feed( $credentials, $user_args ) {
-		$html = '';
-		$twitter_error = new WP_Error;
-
-		static $default_args = array(
-			'user' => '',
-			'number_of_tweets' => 5,
-			'profile_image_size' => 'normal'
-		);
-
-		$args = array_merge( $default_args, $user_args );
-
-		// Lets instantiate Wp_Twitter_Api with your credentials
-		if ( isset( $credentials ) ) {
-			$twitter_api = new Wp_Twitter_Api( $credentials );
-		} else {
-			$twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.' ) );
-		}
-
-		if ( empty( $args['user'] ) ) {
-			$twitter_error->add( 'username', __( 'No username provided.' ) );
-		}
-
-		$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
-			$args['number_of_tweets'],
-			$args['user']
-		);
-
-		$tweets = $twitter_api->query( $query );
-
-		// Build list
-		if ( !empty( $tweets ) ) {
-			$html .= '<ul class="tweets">';
-
-			foreach ( $tweets as $tweet ) {
-				$html .= sprintf(
-					'<li class="tweet">
-						<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
-						<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
-						<span class="tweet__content">%s</span>
-						<span class="tweet__time">%s</span>
-					</li>',
-					$tweet->user->screen_name,
-					$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
-					$tweet->user->screen_name,
-					$tweet->user->name,
-					$this->replace_hashtag_and_username_with_urls( $tweet->text ),
-					sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
-						human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) )
-					)
-				);
-			}
-
-			$html .= '</ul><!-- /.tweets -->';
-		} else {
-			$twitter_error->add( 'notweets', __( 'No tweets available.' ) );
-		}
-
-		if ( 1 > count( $twitter_error->get_error_messages() ) ) {
-			echo $html;
-		} else {
-			echo '<p>Oops, something went wrong. Please rectify these errors.</p>';
-			echo '<ul>';
-			echo '<li>' . implode( '</li><li>', $twitter_error->get_error_messages() ) . '</li>';
-			echo '</ul>';
-		}
+		$tweets = $this->get_tweets( $credentials, $user_args );
+		$this->build_tweets_list( $tweets );
 	}
 
 	/**
@@ -162,5 +97,74 @@ class Twitterfeed {
 		}
 
 		return $url;
+	}
+
+	private function get_tweets( $credentials, $user_args ) {
+		static $default_args = array(
+			'user' => '',
+			'number_of_tweets' => 5,
+			'profile_image_size' => 'normal'
+		);
+
+		$args = array_merge( $default_args, $user_args );
+
+		// Lets instantiate Wp_Twitter_Api with your credentials
+		if ( isset( $credentials ) ) {
+			$twitter_api = new Wp_Twitter_Api( $credentials );
+		} else {
+			$twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.' ) );
+		}
+
+		if ( empty( $args['user'] ) ) {
+			$twitter_error->add( 'username', __( 'No username provided.' ) );
+		}
+
+		// Build the query
+		$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
+			$args['number_of_tweets'],
+			$args['user']
+		);
+
+		return $twitter_api->query( $query );
+	}
+
+	private function build_tweets_list( $tweets ) {
+		$html = '';
+
+		if ( !empty( $tweets ) ) {
+			$html .= '<ul class="tweets">';
+
+			foreach ( $tweets as $tweet ) {
+				$html .= sprintf(
+					'<li class="tweet">
+					<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
+					<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
+					<span class="tweet__content">%s</span>
+					<span class="tweet__time">%s</span>
+					</li>',
+					$tweet->user->screen_name,
+					$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
+					$tweet->user->screen_name,
+					$tweet->user->name,
+					$this->replace_hashtag_and_username_with_urls( $tweet->text ),
+					sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
+					human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) )
+					)
+				);
+			}
+
+			$html .= '</ul><!-- /.tweets -->';
+		} else {
+			$this->twitter_error->add( 'notweets', __( 'No tweets available.' ) );
+		}
+
+		if ( 1 > count( $this->twitter_error->get_error_messages() ) ) {
+			echo $html;
+		} else {
+			echo '<p>Oops, something went wrong. Please rectify these errors.</p>';
+			echo '<ul>';
+			echo '<li>' . implode( '</li><li>', $this->twitter_error->get_error_messages() ) . '</li>';
+			echo '</ul>';
+		}
 	}
 }
