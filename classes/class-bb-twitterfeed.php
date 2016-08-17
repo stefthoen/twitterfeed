@@ -98,7 +98,7 @@ class Twitterfeed {
 					$tweet->user->screen_name,
 					$tweet->user->name,
 					$this->replace_hashtag_and_username_with_urls( $tweet->text ),
-					sprintf( __( 'about %s ago', 'bb-twitterfeed'),
+					sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
 						human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) )
 					)
 				);
