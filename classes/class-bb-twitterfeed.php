@@ -58,7 +58,8 @@ class Twitterfeed {
 
 		static $default_args = array(
 			'user' => '',
-			'number_of_tweets' => 5
+			'number_of_tweets' => 5,
+			'profile_image_size' => 'normal'
 		);
 
 		$args = array_merge( $default_args, $user_args );
@@ -94,11 +95,11 @@ class Twitterfeed {
 						<span class="tweet__time">%s</span>
 					</li>',
 					$tweet->user->screen_name,
-					$tweet->user->profile_image_url_https,
+					$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
 					$tweet->user->screen_name,
 					$tweet->user->name,
 					$this->replace_hashtag_and_username_with_urls( $tweet->text ),
-					sprintf( __( 'about %s ago', 'bb-twitterfeed'),
+					sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
 						human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) )
 					)
 				);
@@ -139,4 +140,23 @@ class Twitterfeed {
 
 		return $text;
 	}
+
+    private function get_profile_image_url( $url, $size = 'normal' ) {
+
+		switch ( $size ) {
+			case 'original':
+				$url = str_replace( '_normal', '', $url );
+				break;
+			case 'mini':
+				$url = str_replace( 'normal', $size, $url );
+				break;
+			case 'bigger':
+				$url = str_replace( 'normal', $size, $url );
+				break;
+			default:
+				break;
+		}
+
+		return $url;
+    }
 }

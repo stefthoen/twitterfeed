@@ -18,7 +18,8 @@ $credentials = array(
 
 $args = array(
 	'user' => 'baardbaard',
-	'number_of_tweets' => 5
+	'number_of_tweets' => 5, // optional
+	'profile_image_size' => 'mini|normal|bigger|original', // optional, normal = default
 );
 
 bbtf()->create_feed( $credentials, $args );
