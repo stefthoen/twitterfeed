@@ -31,5 +31,5 @@ require_once( 'classes/kwi-urllinker/class-urllinker.php' );
 require( __DIR__ . '/classes/class-bb-twitterfeed.php' );
 
 function bbtf() {
-	return $twitterfeed = Twitterfeed::get_instance();
+	return Twitterfeed::get_instance();
 }
