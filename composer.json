@@ -16,6 +16,7 @@
 		"php": ">=5.4"
 	},
 	"require-dev": {
-		"phpdocumentor/phpdocumentor": "^2.8"
+		"phpdocumentor/phpdocumentor": "^2.8",
+		"phpunit/phpunit": "5.5.*"
 	}
 }

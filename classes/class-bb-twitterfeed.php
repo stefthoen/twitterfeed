@@ -5,6 +5,7 @@ class Twitterfeed {
 	static $instance = null;
 	private $consumer_key = '';
 	private $consumer_secret = '';
+	private $twitter_error = null;
 
 	/**
 	 * Returns an instance of this class. An implementation of the singleton design pattern.
@@ -23,11 +24,8 @@ class Twitterfeed {
 	}
 
 	private function __construct() {
-		$this->run();
-	}
-
-	private function run() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
+		$this->twitter_error = new WP_Error;
 	}
 
 	/**
@@ -43,19 +41,65 @@ class Twitterfeed {
 	/**
 	 * Get users latest tweets and outputs an unordered list.
 	 *
-	 * @param mixed $credentials
-	 *   @param string $consumer_key Twitter API key
-	 *   @param string $consumer_secret Twitter API secret
-	 * @param mixed $user_args
-	 *   @param string $user Twitter user who's tweets we'll get
-	 *   @param int $number_of_tweets Number of tweets that it gets
+	 * @param array $credentials Twitter API key and secret
+	 * @param array $user_args   Twitter user and number of tweets
 	 * @access public
 	 * @return void
 	 */
 	public function create_feed( $credentials, $user_args ) {
-		$html = '';
-		$twitter_error = new WP_Error;
+		$tweets = $this->get_tweets( $credentials, $user_args );
+		$this->build_tweets_list( $tweets );
+	}
 
+	/**
+	 * Replaces hashtag and username with links.
+	 *
+	 * @param string $text The tweets text
+	 * @access private
+	 * @return string $text The tweets text
+	 */
+	private function replace_hashtag_and_username_with_urls( $text ) {
+		$text = htmlEscapeAndLinkUrls( $text );
+
+		$pattern_username = '/@([a-zA-z0-9]+)/';
+		$replacement_username = '<a href="https://www.twitter.com/${1}">@${1}</a>';
+		$text = preg_replace( $pattern_username, $replacement_username, $text );
+
+		$pattern_hashtag = '/#([a-zA-z0-9]+)/';
+		$replacement_hashtag = '<a href="https://www.twitter.com/hashtag/${1}">#${1}</a>';
+		$text = preg_replace( $pattern_hashtag, $replacement_hashtag, $text );
+
+		return $text;
+	}
+
+	/**
+	 * Gets the Twitter profile image with the correct size.
+	 *
+	 * @param string $url URL to Twitter profile image
+	 * @param string $size Size of Twitter profile image
+	 * @access private
+	 * @return string $url URL to Twitter profile image with requested size
+	 */
+	private function get_profile_image_url( $url, $size = 'normal' ) {
+
+		switch ( $size ) {
+		case 'original':
+			$url = str_replace( '_normal', '', $url );
+			break;
+		case 'mini':
+			$url = str_replace( 'normal', $size, $url );
+			break;
+		case 'bigger':
+			$url = str_replace( 'normal', $size, $url );
+			break;
+		default:
+			break;
+		}
+
+		return $url;
+	}
+
+	private function get_tweets( $credentials, $user_args ) {
 		static $default_args = array(
 			'user' => '',
 			'number_of_tweets' => 5,
@@ -75,24 +119,28 @@ class Twitterfeed {
 			$twitter_error->add( 'username', __( 'No username provided.' ) );
 		}
 
+		// Build the query
 		$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
 			$args['number_of_tweets'],
 			$args['user']
 		);
 
-		$tweets = $twitter_api->query( $query );
+		return $twitter_api->query( $query );
+	}
 
-		// Build list
+	private function build_tweets_list( $tweets ) {
+		$html = '';
+
 		if ( !empty( $tweets ) ) {
 			$html .= '<ul class="tweets">';
 
 			foreach ( $tweets as $tweet ) {
 				$html .= sprintf(
 					'<li class="tweet">
-						<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
-						<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
-						<span class="tweet__content">%s</span>
-						<span class="tweet__time">%s</span>
+					<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
+					<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
+					<span class="tweet__content">%s</span>
+					<span class="tweet__time">%s</span>
 					</li>',
 					$tweet->user->screen_name,
 					$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
@@ -100,63 +148,23 @@ class Twitterfeed {
 					$tweet->user->name,
 					$this->replace_hashtag_and_username_with_urls( $tweet->text ),
 					sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
-						human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) )
+					human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) )
 					)
 				);
 			}
 
 			$html .= '</ul><!-- /.tweets -->';
 		} else {
-			$twitter_error->add( 'notweets', __( 'No tweets available.' ) );
+			$this->twitter_error->add( 'notweets', __( 'No tweets available.' ) );
 		}
 
-		if ( 1 > count( $twitter_error->get_error_messages() ) ) {
+		if ( 1 > count( $this->twitter_error->get_error_messages() ) ) {
 			echo $html;
 		} else {
 			echo '<p>Oops, something went wrong. Please rectify these errors.</p>';
 			echo '<ul>';
-			echo '<li>' . implode( '</li><li>', $twitter_error->get_error_messages() ) . '</li>';
+			echo '<li>' . implode( '</li><li>', $this->twitter_error->get_error_messages() ) . '</li>';
 			echo '</ul>';
 		}
 	}
-
-	/**
-	 * Replaces hashtag and username with links.
-	 *
-	 * @param string $text The tweets text
-	 * @access private
-	 * @return string $text The tweets text
-	 */
-	private function replace_hashtag_and_username_with_urls( $text ) {
-		$text = htmlEscapeAndLinkUrls( $text );
-
-		$pattern_username = '/@([a-zA-z0-9]+)/';
-		$replacement_username = '<a href="https://www.twitter.com/${1}">@${1}</a>';
-		$text = preg_replace( $pattern_username, $replacement_username, $text );
-
-		$pattern_hashtag = '/#([a-zA-z0-9]+)/';;
-		$replacement_hashtag = '<a href="https://www.twitter.com/hashtag/${1}">#${1}</a>';
-		$text = preg_replace( $pattern_hashtag, $replacement_hashtag, $text );
-
-		return $text;
-	}
-
-    private function get_profile_image_url( $url, $size = 'normal' ) {
-
-		switch ( $size ) {
-			case 'original':
-				$url = str_replace( '_normal', '', $url );
-				break;
-			case 'mini':
-				$url = str_replace( 'normal', $size, $url );
-				break;
-			case 'bigger':
-				$url = str_replace( 'normal', $size, $url );
-				break;
-			default:
-				break;
-		}
-
-		return $url;
-    }
 }
