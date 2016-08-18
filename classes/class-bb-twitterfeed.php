@@ -24,8 +24,12 @@ class Twitterfeed {
 	}
 
 	private function __construct() {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
+		$this->init();
 		$this->twitter_error = new WP_Error;
+	}
+
+	private function init() {
+		add_action( 'init', array( $this, 'load_textdomain' ) );
 	}
 
 	/**
