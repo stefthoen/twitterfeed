@@ -6,6 +6,7 @@ class Twitterfeed {
 	private $consumer_key = '';
 	private $consumer_secret = '';
 	private $twitter_error = null;
+	const twitter_url = 'https://www.twitter.com';
 
 	/**
 	 * Returns an instance of this class. An implementation of the singleton design pattern.
@@ -52,7 +53,15 @@ class Twitterfeed {
 	 */
 	public function create_feed( $credentials, $user_args ) {
 		$tweets = $this->get_tweets( $credentials, $user_args );
-		$this->build_tweets_list( $tweets );
+		$tweets_list = $this->get_tweets_list( $tweets );
+
+		if ( isset( $tweets_list ) ) {
+			echo $tweets_list;
+		} else {
+			$this->twitter_error->add( 'notweets', __( 'No tweets available.' ) );
+		}
+
+		$this->handle_errors();
 	}
 
 	/**
@@ -66,11 +75,11 @@ class Twitterfeed {
 		$text = htmlEscapeAndLinkUrls( $text );
 
 		$pattern_username = '/@([a-zA-z0-9]+)/';
-		$replacement_username = '<a href="https://www.twitter.com/${1}">@${1}</a>';
+		$replacement_username = '<a href="' . self::twitter_url  . '/${1}">@${1}</a>';
 		$text = preg_replace( $pattern_username, $replacement_username, $text );
 
 		$pattern_hashtag = '/#([a-zA-z0-9]+)/';
-		$replacement_hashtag = '<a href="https://www.twitter.com/hashtag/${1}">#${1}</a>';
+		$replacement_hashtag = '<a href="' . self::twitter_url . '/hashtag/${1}">#${1}</a>';
 		$text = preg_replace( $pattern_hashtag, $replacement_hashtag, $text );
 
 		return $text;
@@ -132,43 +141,48 @@ class Twitterfeed {
 		return $twitter_api->query( $query );
 	}
 
-	private function build_tweets_list( $tweets ) {
-		$html = '';
+	private function get_tweets_list( $tweets ) {
 
-		if ( !empty( $tweets ) ) {
-			$html .= '<ul class="tweets">';
-
-			foreach ( $tweets as $tweet ) {
-				$html .= sprintf(
-					'<li class="tweet">
-					<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
-					<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
-					<span class="tweet__content">%s</span>
-					<span class="tweet__time">%s</span>
-					</li>',
-					$tweet->user->screen_name,
-					$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
-					$tweet->user->screen_name,
-					$tweet->user->name,
-					$this->replace_hashtag_and_username_with_urls( $tweet->text ),
-					sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
-					human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) )
-					)
-				);
-			}
-
-			$html .= '</ul><!-- /.tweets -->';
-		} else {
-			$this->twitter_error->add( 'notweets', __( 'No tweets available.' ) );
+		if ( empty( $tweets ) ) {
+			return;
 		}
 
-		if ( 1 > count( $this->twitter_error->get_error_messages() ) ) {
-			echo $html;
-		} else {
-			echo '<p>Oops, something went wrong. Please rectify these errors.</p>';
-			echo '<ul>';
-			echo '<li>' . implode( '</li><li>', $this->twitter_error->get_error_messages() ) . '</li>';
-			echo '</ul>';
+		$html .= '<ul class="tweets">';
+
+		foreach ( $tweets as $tweet ) {
+			$html .= sprintf(
+				'<li class="tweet">
+				<a href="%s" class="tweet__user-photo"><img src="%s"></a>
+				<a href="%s" class="tweet__user">%s</a>
+				<span class="tweet__content">%s</span>
+				<span class="tweet__time">%s</span>
+				</li>',
+				self::twitter_url . '/' . $tweet->user->screen_name,
+				$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
+				self::twitter_url . '/' . $tweet->user->screen_name,
+				$tweet->user->name,
+				$this->replace_hashtag_and_username_with_urls( $tweet->text ),
+				sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
+					human_time_diff(
+						strtotime( $tweet->created_at ),
+						current_time( 'timestamp' )
+					)
+				)
+			);
+		}
+
+		$html .= '</ul><!-- /.tweets -->';
+
+		return $html;
+	}
+
+	private function handle_errors() {
+		if ( !empty ( $this->twitter_error->get_error_messages() ) ) {
+			printf(
+				'<p>Oops, something went wrong. Please rectify these errors.</p>
+				<ul><li>%s</li><ul>',
+				implode( '</li><li>', $this->twitter_error->get_error_messages() )
+			);
 		}
 	}
 }
