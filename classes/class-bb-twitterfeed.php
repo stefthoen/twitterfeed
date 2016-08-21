@@ -125,11 +125,11 @@ class Twitterfeed {
 		if ( isset( $credentials ) ) {
 			$twitter_api = new Wp_Twitter_Api( $credentials );
 		} else {
-			$twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.' ) );
+			$his->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.' ) );
 		}
 
 		if ( empty( $args['user'] ) ) {
-			$twitter_error->add( 'username', __( 'No username provided.' ) );
+			$this->twitter_error->add( 'username', __( 'No username provided.' ) );
 		}
 
 		// Build the query

@@ -20,15 +20,7 @@
  * GNU General Public License for more details.
  */
 
-// Include Twitter API Client
-require_once( 'classes/class-wp-twitter-api.php' );
-
-// Include URL Linker
-require_once( 'classes/kwi-urllinker/urllinker.php' );
-require_once( 'classes/kwi-urllinker/urllinker-interface.php' );
-require_once( 'classes/kwi-urllinker/class-urllinker.php' );
-
-require( __DIR__ . '/classes/class-bb-twitterfeed.php' );
+require_once( 'vendor/autoload.php' );
 
 function bbtf() {
 	return Twitterfeed::get_instance();

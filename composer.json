@@ -13,10 +13,16 @@
 		}
 	],
 	"require": {
-		"php": ">=5.4"
+		"php": ">=5.4",
+		"kwi/urllinker": "@dev"
 	},
 	"require-dev": {
 		"phpdocumentor/phpdocumentor": "^2.8",
 		"phpunit/phpunit": "5.5.*"
+	},
+	"autoload": {
+		"classmap": [
+			"classes/"
+		]
 	}
 }
