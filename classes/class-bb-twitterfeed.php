@@ -2,33 +2,22 @@
 
 class Twitterfeed {
 
-	static $instance = null;
 	private $consumer_key = '';
 	private $consumer_secret = '';
 	private $twitter_error = null;
 	const twitter_url = 'https://www.twitter.com';
 
-	/**
-	 * Returns an instance of this class. An implementation of the singleton design pattern.
-	 *
-	 * @static
-	 * @access public
-	 * @return object A Twitterfeed instance
-	 */
-	public static function get_instance() {
-
-		if( null == self::$instance ) {
-			self::$instance = new Twitterfeed();
-		}
-
-		return self::$instance;
-	}
-
-	private function __construct() {
+	public function __construct() {
 		$this->init();
 		$this->twitter_error = new WP_Error;
 	}
 
+	/**
+	 * Hooks to call on init
+	 *
+	 * @access private
+	 * @return void
+	 */
 	private function init() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 	}

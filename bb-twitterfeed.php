@@ -22,6 +22,4 @@
 
 require_once( 'vendor/autoload.php' );
 
-function bbtf() {
-	return Twitterfeed::get_instance();
-}
+$twitterfeed = new Twitterfeed();
