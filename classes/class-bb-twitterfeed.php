@@ -1,6 +1,10 @@
 <?php
 
 class Twitterfeed {
+	/*
+	 * @todo: The following functionality should be in different classes:
+	 *        - handle_errors
+	 */
 
 	private $consumer_key = '';
 	private $consumer_secret = '';
@@ -8,28 +12,8 @@ class Twitterfeed {
 	const twitter_url = 'https://www.twitter.com';
 
 	public function __construct() {
-		$this->init();
+		new I18n();
 		$this->twitter_error = new WP_Error;
-	}
-
-	/**
-	 * Hooks to call on init
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function init() {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
-	}
-
-	/**
-	 * Load the plugin's translated strings.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	private function load_textdomain() {
-		load_plugin_textdomain( 'bb-twitterfeed', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**
@@ -47,7 +31,7 @@ class Twitterfeed {
 		if ( isset( $tweets_list ) ) {
 			echo $tweets_list;
 		} else {
-			$this->twitter_error->add( 'notweets', __( 'No tweets available.' ) );
+			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
 		}
 
 		$this->handle_errors();
@@ -114,11 +98,11 @@ class Twitterfeed {
 		if ( isset( $credentials ) ) {
 			$twitter_api = new Wp_Twitter_Api( $credentials );
 		} else {
-			$his->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.' ) );
+			$his->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
 		}
 
 		if ( empty( $args['user'] ) ) {
-			$this->twitter_error->add( 'username', __( 'No username provided.' ) );
+			$this->twitter_error->add( 'username', __( 'No username provided.', 'bb-twitterfeed' ) );
 		}
 
 		// Build the query
@@ -146,16 +130,16 @@ class Twitterfeed {
 				<span class="tweet__content">%s</span>
 				<span class="tweet__time">%s</span>
 				</li>',
-				self::twitter_url . '/' . $tweet->user->screen_name,
-				$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
-				self::twitter_url . '/' . $tweet->user->screen_name,
-				$tweet->user->name,
-				$this->replace_hashtag_and_username_with_urls( $tweet->text ),
-				sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
-					human_time_diff(
-						strtotime( $tweet->created_at ),
-						current_time( 'timestamp' )
-					)
+self::twitter_url . '/' . $tweet->user->screen_name,
+$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
+self::twitter_url . '/' . $tweet->user->screen_name,
+$tweet->user->name,
+$this->replace_hashtag_and_username_with_urls( $tweet->text ),
+sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
+human_time_diff(
+	strtotime( $tweet->created_at ),
+	current_time( 'timestamp' )
+)
 				)
 			);
 		}
@@ -170,7 +154,7 @@ class Twitterfeed {
 			printf(
 				'<p>Oops, something went wrong. Please rectify these errors.</p>
 				<ul><li>%s</li><ul>',
-				implode( '</li><li>', $this->twitter_error->get_error_messages() )
+implode( '</li><li>', $this->twitter_error->get_error_messages() )
 			);
 		}
 	}

@@ -22,4 +22,8 @@
 
 require_once( 'vendor/autoload.php' );
 
+if ( ! defined( 'WPSEO_PATH' ) ) {
+	define( 'BBTF_PATH', plugin_dir_path( __FILE__ ) );
+}
+
 $twitterfeed = new Twitterfeed();
