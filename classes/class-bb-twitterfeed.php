@@ -1,10 +1,6 @@
 <?php
 
 class Twitterfeed {
-	/*
-	 * @todo: The following functionality should be in different classes:
-	 *        - handle_errors
-	 */
 
 	private $consumer_key = '';
 	private $consumer_secret = '';
@@ -152,7 +148,7 @@ human_time_diff(
 	private function handle_errors() {
 		if ( !empty ( $this->twitter_error->get_error_messages() ) ) {
 			printf(
-				'<p>Oops, something went wrong. Please rectify these errors.</p>
+				'<p>' . __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' ) . '</p>
 				<ul><li>%s</li><ul>',
 implode( '</li><li>', $this->twitter_error->get_error_messages() )
 			);
