@@ -5,6 +5,7 @@ class Twitterfeed {
 	private $consumer_key = '';
 	private $consumer_secret = '';
 	private $twitter_error = null;
+	private $profile_image_size;
 	const twitter_url = 'https://www.twitter.com';
 
 	public function __construct() {
@@ -21,6 +22,7 @@ class Twitterfeed {
 	 * @return void
 	 */
 	public function create_feed( $credentials, $user_args ) {
+		$this->profile_image_size = $user_args['profile_image_size'];
 		$tweets = $this->get_tweets( $credentials, $user_args );
 		$tweets_list = $this->get_tweets_list( $tweets );
 
@@ -31,54 +33,6 @@ class Twitterfeed {
 		}
 
 		$this->handle_errors();
-	}
-
-	/**
-	 * Replaces hashtag and username with links.
-	 *
-	 * @param string $text The tweets text
-	 * @access private
-	 * @return string $text The tweets text
-	 */
-	private function replace_hashtag_and_username_with_urls( $text ) {
-		$text = htmlEscapeAndLinkUrls( $text );
-
-		$pattern_username = '/@([a-zA-z0-9]+)/';
-		$replacement_username = '<a href="' . self::twitter_url  . '/${1}">@${1}</a>';
-		$text = preg_replace( $pattern_username, $replacement_username, $text );
-
-		$pattern_hashtag = '/#([a-zA-z0-9]+)/';
-		$replacement_hashtag = '<a href="' . self::twitter_url . '/hashtag/${1}">#${1}</a>';
-		$text = preg_replace( $pattern_hashtag, $replacement_hashtag, $text );
-
-		return $text;
-	}
-
-	/**
-	 * Gets the Twitter profile image with the correct size.
-	 *
-	 * @param string $url URL to Twitter profile image
-	 * @param string $size Size of Twitter profile image
-	 * @access private
-	 * @return string $url URL to Twitter profile image with requested size
-	 */
-	private function get_profile_image_url( $url, $size = 'normal' ) {
-
-		switch ( $size ) {
-		case 'original':
-			$url = str_replace( '_normal', '', $url );
-			break;
-		case 'mini':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		case 'bigger':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		default:
-			break;
-		}
-
-		return $url;
 	}
 
 	private function get_tweets( $credentials, $user_args ) {
@@ -107,42 +61,60 @@ class Twitterfeed {
 			$args['user']
 		);
 
-		return $twitter_api->query( $query );
-	}
-
-	private function get_tweets_list( $tweets ) {
+		$tweets = $twitter_api->query( $query );
 
 		if ( empty( $tweets ) ) {
 			return;
 		}
 
-		$html .= '<ul class="tweets">';
+		$tweets = $this->filter_tweets( $tweets );
 
-		foreach ( $tweets as $tweet ) {
-			$html .= sprintf(
-				'<li class="tweet">
-				<a href="%s" class="tweet__user-photo"><img src="%s"></a>
-				<a href="%s" class="tweet__user">%s</a>
-				<span class="tweet__content">%s</span>
-				<span class="tweet__time">%s</span>
-				</li>',
-self::twitter_url . '/' . $tweet->user->screen_name,
-$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
-self::twitter_url . '/' . $tweet->user->screen_name,
-$tweet->user->name,
-$this->replace_hashtag_and_username_with_urls( $tweet->text ),
-sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
-human_time_diff(
-	strtotime( $tweet->created_at ),
-	current_time( 'timestamp' )
-)
-				)
+		return $tweets;
+	}
+
+	/**
+	 * Build
+	 *
+	 * @param array $unfiltered_tweets
+	 * @access private
+	 * @return object $tweets Tweets object that contains tweet objects
+	 */
+	private function filter_tweets( $unfiltered_tweets ) {
+		$tweets = new Tweets();
+
+		// @todo: do this with higher-order function
+		foreach ( $unfiltered_tweets as $unfiltered_tweet ) {
+
+			$tweet = new Tweet(
+				$unfiltered_tweet->user->screen_name,
+				$unfiltered_tweet->user->name,
+				$unfiltered_tweet->user->profile_image_url_https,
+				$this->profile_image_size,
+				$unfiltered_tweet->text,
+				$unfiltered_tweet->created_at
 			);
+
+			$tweets->add_tweet( $tweet );
 		}
 
-		$html .= '</ul><!-- /.tweets -->';
+		return $tweets;
+	}
 
-		return $html;
+	/**
+	 * Get the HTML for the Twitter list.
+	 *
+	 * @param object $tweets
+	 * @access private
+	 * @return string Mustache template
+	 */
+	private function get_tweets_list( $tweets ) {
+
+		$m = new Mustache_Engine(array(
+			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
+			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
+		));
+
+		return $m->render( 'timeline', $tweets );
 	}
 
 	private function handle_errors() {

@@ -7,7 +7,7 @@ class I18n {
 	}
 
 	/**
-	 * Hooks to call on init
+	 * Hooks to call on init.
 	 *
 	 * @access private
 	 * @return void
