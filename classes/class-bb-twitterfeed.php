@@ -118,6 +118,7 @@ class Twitterfeed {
 	/**
 	 * Print errors if we have them.
 	 *
+	 * @todo: Use Mustache template and perhaps create seperate error class
 	 * @access private
 	 * @return void
 	 */
