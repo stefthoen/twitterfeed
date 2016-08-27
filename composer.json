@@ -19,7 +19,8 @@
 	},
 	"require-dev": {
 		"phpdocumentor/phpdocumentor": "^2.8",
-		"phpunit/phpunit": "5.5.*"
+		"phpunit/phpunit": "5.5.*",
+		"raveren/kint": "^1.0"
 	},
 	"autoload": {
 		"classmap": [
