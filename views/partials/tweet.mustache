@@ -1,6 +1,6 @@
 <li class="tweet">
-	<a href="{{ screen_name }}" class="tweet__user-photo"><img src="{{ get_profile_image_url }}"></a>
-	<a href="{{ get_user_url }}" class="tweet__user">{{ user_name }}</a>
+	<a href="{{ get_profile_url }}" class="tweet__user-photo"><img src="{{ get_profile_image_url }}"></a>
+	<a href="{{ get_profile_url }}" class="tweet__user">{{ user_name }}</a>
 	<span class="tweet__content">{{{ filter_text }}}</span>
 	<span class="tweet__time">{{ get_date }}</span>
 </li>

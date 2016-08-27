@@ -26,4 +26,8 @@ if ( ! defined( 'BBTF_PATH' ) ) {
 	define( 'BBTF_PATH', plugin_dir_path( __FILE__ ) );
 }
 
+if ( ! defined( 'BBTF_TWITTER_URL' ) ) {
+	define( 'BBTF_TWITTER_URL', 'https://www.twitter.com' );
+}
+
 $twitterfeed = new Twitterfeed();
