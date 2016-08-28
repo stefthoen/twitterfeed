@@ -6,10 +6,15 @@ class Twitterfeed {
 	private $consumer_secret = '';
 	private $twitter_error = null;
 	private $profile_image_size;
+    public $mustache;
 
 	public function __construct() {
 		new I18n();
 		$this->twitter_error = new WP_Error;
+		$this->mustache = new Mustache_Engine(array(
+			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
+			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
+		));
 	}
 
 	/**
@@ -106,29 +111,21 @@ class Twitterfeed {
 	 * @return string Mustache template
 	 */
 	private function get_list( $tweets ) {
-
-		$m = new Mustache_Engine(array(
-			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
-			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
-		));
-
-		return $m->render( 'timeline', $tweets );
+		return $this->mustache->render( 'tweets', $tweets );
 	}
 
 	/**
 	 * Print errors if we have them.
 	 *
-	 * @todo: Use Mustache template and perhaps create seperate error class
 	 * @access private
 	 * @return void
 	 */
 	private function handle_errors() {
 		if ( !empty ( $this->twitter_error->get_error_messages() ) ) {
-			printf(
-				'<p>' . __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' ) . '</p>
-				<ul><li>%s</li><ul>',
-implode( '</li><li>', $this->twitter_error->get_error_messages() )
-			);
+			echo $this->mustache->render('errors', [
+				'error_heading' => __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' ),
+				'errors' => $this->twitter_error->get_error_messages()
+			] );
 		}
 	}
 }
