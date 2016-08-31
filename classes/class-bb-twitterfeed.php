@@ -4,13 +4,13 @@ class Twitterfeed {
 
 	private $consumer_key = '';
 	private $consumer_secret = '';
-	private $twitter_error = null;
 	private $profile_image_size;
     public $mustache;
+	public $error;
 
 	public function __construct() {
 		new I18n();
-		$this->twitter_error = new WP_Error;
+		$this->error = new Twitter_Error();
 		$this->mustache = new Mustache_Engine(array(
 			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
 			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
@@ -35,10 +35,13 @@ class Twitterfeed {
 		if ( isset( $list ) ) {
 			echo $list;
 		} else {
-			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
+			d($this->error);
+			$this->error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
+			d($this->error);
 		}
 
-		$this->handle_errors();
+		$this->error->handle();
+		d($this->error);
 	}
 
 	private function get_tweets( $credentials, $user_args ) {
@@ -53,11 +56,11 @@ class Twitterfeed {
 		if ( isset( $credentials ) ) {
 			$twitter_api = new Wp_Twitter_Api( $credentials );
 		} else {
-			$his->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
+			$this->error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
 		}
 
 		if ( empty( $args['user'] ) ) {
-			$this->twitter_error->add( 'username', __( 'No username provided.', 'bb-twitterfeed' ) );
+			$this->error->add( 'username', __( 'No username provided.', 'bb-twitterfeed' ) );
 		}
 
 		$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
@@ -112,20 +115,5 @@ class Twitterfeed {
 	 */
 	private function get_list( $tweets ) {
 		return $this->mustache->render( 'tweets', $tweets );
-	}
-
-	/**
-	 * Print errors if we have them.
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function handle_errors() {
-		if ( !empty ( $this->twitter_error->get_error_messages() ) ) {
-			echo $this->mustache->render('errors', [
-				'error_heading' => __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' ),
-				'errors' => $this->twitter_error->get_error_messages()
-			] );
-		}
 	}
 }
