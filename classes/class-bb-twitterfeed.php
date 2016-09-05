@@ -6,11 +6,11 @@ class Twitterfeed {
 	private $consumer_secret = '';
 	private $profile_image_size;
     public $mustache;
-	public $error;
+	public $twitter_error;
 
 	public function __construct() {
 		new I18n();
-		$this->error = new Twitter_Error();
+		$this->twitter_error = new Twitter_Error();
 		$this->mustache = new Mustache_Engine(array(
 			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
 			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
@@ -28,20 +28,15 @@ class Twitterfeed {
 	public function create_feed( $credentials, $user_args ) {
 
 		$this->profile_image_size = $user_args['profile_image_size'];
-
 		$tweets = $this->get_tweets( $credentials, $user_args );
-		$list = $this->get_list( $tweets );
 
-		if ( isset( $list ) ) {
-			echo $list;
+		if ( ! empty($tweets) ) {
+			echo $this->get_list( $tweets );
 		} else {
-			d($this->error);
-			$this->error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
-			d($this->error);
+			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
 		}
 
-		$this->error->handle();
-		d($this->error);
+		$this->twitter_error->handle();
 	}
 
 	private function get_tweets( $credentials, $user_args ) {
@@ -56,11 +51,11 @@ class Twitterfeed {
 		if ( isset( $credentials ) ) {
 			$twitter_api = new Wp_Twitter_Api( $credentials );
 		} else {
-			$this->error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
+			$this->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
 		}
 
 		if ( empty( $args['user'] ) ) {
-			$this->error->add( 'username', __( 'No username provided.', 'bb-twitterfeed' ) );
+			$this->twitter_error->add( 'username', __( 'No username provided.', 'bb-twitterfeed' ) );
 		}
 
 		$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',

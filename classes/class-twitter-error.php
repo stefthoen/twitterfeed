@@ -8,7 +8,6 @@ class Twitter_Error {
 
 	public function __construct() {
 		$this->errors = new WP_Error;
-		$this->heading = __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' );
 
 		$this->mustache = new Mustache_Engine(array(
 			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
@@ -16,9 +15,16 @@ class Twitter_Error {
 		));
 	}
 
-	public function add( $error ) {
-		d('nog een error');
-		$this->errors->add( $error );
+	/**
+	 * Wrapper around WP_Error add method.
+	 *
+	 * @param string $error_title
+	 * @param string $error_message
+	 * @access public
+	 * @return void
+	 */
+	public function add( $error_title, $error_message ) {
+		$this->errors->add( $error_title, $error_message );
 	}
 
 	/**
@@ -28,9 +34,11 @@ class Twitter_Error {
 	 * @return void
 	 */
 	public function handle() {
+		$this->heading = __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' );
 		$this->error_messages = $this->errors->get_error_messages();
+
 		if ( !empty ( $this->error_messages ) ) {
-			echo $this->mustache->render( 'errors', $errors );
+			echo $this->mustache->render( 'errors', $this );
 		}
 	}
 }
