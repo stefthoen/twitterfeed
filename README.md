@@ -6,7 +6,7 @@ It uses [Twitter-API-1.1-Client-for-Wordpress](https://github.com/micc83/Twitter
 
 Create a Twitter app and get credentials at [https://dev.twitter.com/apps](https://dev.twitter.com/apps).
 
-Add and activate the plugin and use the following code to your template:
+Add and activate the plugin and use the following code in your template:
 
 ```
 <?php 

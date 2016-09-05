@@ -2,40 +2,19 @@
 
 class Twitterfeed {
 
-	static $instance = null;
 	private $consumer_key = '';
 	private $consumer_secret = '';
-	private $twitter_error = null;
+	private $profile_image_size;
+    public $mustache;
+	public $twitter_error;
 
-	/**
-	 * Returns an instance of this class. An implementation of the singleton design pattern.
-	 *
-	 * @static
-	 * @access public
-	 * @return object A Twitterfeed instance
-	 */
-	public static function get_instance() {
-
-		if( null == self::$instance ) {
-			self::$instance = new Twitterfeed();
-		}
-
-		return self::$instance;
-	}
-
-	private function __construct() {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
-		$this->twitter_error = new WP_Error;
-	}
-
-	/**
-	 * Load the plugin's translated strings.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	private function load_textdomain() {
-		load_plugin_textdomain( 'bb-twitterfeed', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	public function __construct() {
+		new I18n();
+		$this->twitter_error = new Twitter_Error();
+		$this->mustache = new Mustache_Engine(array(
+			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
+			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
+		));
 	}
 
 	/**
@@ -47,56 +26,17 @@ class Twitterfeed {
 	 * @return void
 	 */
 	public function create_feed( $credentials, $user_args ) {
+
+		$this->profile_image_size = $user_args['profile_image_size'];
 		$tweets = $this->get_tweets( $credentials, $user_args );
-		$this->build_tweets_list( $tweets );
-	}
 
-	/**
-	 * Replaces hashtag and username with links.
-	 *
-	 * @param string $text The tweets text
-	 * @access private
-	 * @return string $text The tweets text
-	 */
-	private function replace_hashtag_and_username_with_urls( $text ) {
-		$text = htmlEscapeAndLinkUrls( $text );
-
-		$pattern_username = '/@([a-zA-z0-9]+)/';
-		$replacement_username = '<a href="https://www.twitter.com/${1}">@${1}</a>';
-		$text = preg_replace( $pattern_username, $replacement_username, $text );
-
-		$pattern_hashtag = '/#([a-zA-z0-9]+)/';
-		$replacement_hashtag = '<a href="https://www.twitter.com/hashtag/${1}">#${1}</a>';
-		$text = preg_replace( $pattern_hashtag, $replacement_hashtag, $text );
-
-		return $text;
-	}
-
-	/**
-	 * Gets the Twitter profile image with the correct size.
-	 *
-	 * @param string $url URL to Twitter profile image
-	 * @param string $size Size of Twitter profile image
-	 * @access private
-	 * @return string $url URL to Twitter profile image with requested size
-	 */
-	private function get_profile_image_url( $url, $size = 'normal' ) {
-
-		switch ( $size ) {
-		case 'original':
-			$url = str_replace( '_normal', '', $url );
-			break;
-		case 'mini':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		case 'bigger':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		default:
-			break;
+		if ( ! empty($tweets) ) {
+			echo $this->get_list( $tweets );
+		} else {
+			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
 		}
 
-		return $url;
+		$this->twitter_error->handle();
 	}
 
 	private function get_tweets( $credentials, $user_args ) {
@@ -108,63 +48,67 @@ class Twitterfeed {
 
 		$args = array_merge( $default_args, $user_args );
 
-		// Lets instantiate Wp_Twitter_Api with your credentials
 		if ( isset( $credentials ) ) {
 			$twitter_api = new Wp_Twitter_Api( $credentials );
 		} else {
-			$twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.' ) );
+			$this->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
 		}
 
 		if ( empty( $args['user'] ) ) {
-			$twitter_error->add( 'username', __( 'No username provided.' ) );
+			$this->twitter_error->add( 'username', __( 'No username provided.', 'bb-twitterfeed' ) );
 		}
 
-		// Build the query
 		$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
 			$args['number_of_tweets'],
 			$args['user']
 		);
 
-		return $twitter_api->query( $query );
+		$tweets = $twitter_api->query( $query );
+
+		if ( empty( $tweets ) ) {
+			return;
+		}
+
+		$tweets = $this->filter_tweets( $tweets );
+
+		return $tweets;
 	}
 
-	private function build_tweets_list( $tweets ) {
-		$html = '';
+	/**
+	 * Convert tweets to an object with a array of tweet objects.
+	 *
+	 * @param array $unfiltered_tweets
+	 * @access private
+	 * @return object $tweets Tweets object that contains tweet objects
+	 */
+	private function filter_tweets( $unfiltered_tweets ) {
+		$tweets = new Tweets();
 
-		if ( !empty( $tweets ) ) {
-			$html .= '<ul class="tweets">';
+		$tweets->tweets = array_map( function( $unfiltered_tweet ) {
+			$tweet = new Tweet(
+				$unfiltered_tweet->user->screen_name,
+				$unfiltered_tweet->user->name,
+				$unfiltered_tweet->user->profile_image_url_https,
+				$this->profile_image_size,
+				$unfiltered_tweet->text,
+				$unfiltered_tweet->created_at
+			);
 
-			foreach ( $tweets as $tweet ) {
-				$html .= sprintf(
-					'<li class="tweet">
-					<a href="https://www.twitter.com/%s" class="tweet__user-photo"><img src="%s"></a>
-					<a href="https://www.twitter.com/%s" class="tweet__user">%s</a>
-					<span class="tweet__content">%s</span>
-					<span class="tweet__time">%s</span>
-					</li>',
-					$tweet->user->screen_name,
-					$this->get_profile_image_url($tweet->user->profile_image_url_https, $args['profile_image_size']),
-					$tweet->user->screen_name,
-					$tweet->user->name,
-					$this->replace_hashtag_and_username_with_urls( $tweet->text ),
-					sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
-					human_time_diff( strtotime( $tweet->created_at ), current_time( 'timestamp' ) )
-					)
-				);
-			}
+			return $tweet;
 
-			$html .= '</ul><!-- /.tweets -->';
-		} else {
-			$this->twitter_error->add( 'notweets', __( 'No tweets available.' ) );
-		}
+		}, $unfiltered_tweets );
 
-		if ( 1 > count( $this->twitter_error->get_error_messages() ) ) {
-			echo $html;
-		} else {
-			echo '<p>Oops, something went wrong. Please rectify these errors.</p>';
-			echo '<ul>';
-			echo '<li>' . implode( '</li><li>', $this->twitter_error->get_error_messages() ) . '</li>';
-			echo '</ul>';
-		}
+		return $tweets;
+	}
+
+	/**
+	 * Get the Twitter list template.
+	 *
+	 * @param object $tweets
+	 * @access private
+	 * @return string Mustache template
+	 */
+	private function get_list( $tweets ) {
+		return $this->mustache->render( 'tweets', $tweets );
 	}
 }

@@ -20,16 +20,14 @@
  * GNU General Public License for more details.
  */
 
-// Include Twitter API Client
-require_once( 'classes/class-wp-twitter-api.php' );
+require_once( 'vendor/autoload.php' );
 
-// Include URL Linker
-require_once( 'classes/kwi-urllinker/urllinker.php' );
-require_once( 'classes/kwi-urllinker/urllinker-interface.php' );
-require_once( 'classes/kwi-urllinker/class-urllinker.php' );
-
-require( __DIR__ . '/classes/class-bb-twitterfeed.php' );
-
-function bbtf() {
-	return Twitterfeed::get_instance();
+if ( ! defined( 'BBTF_PATH' ) ) {
+	define( 'BBTF_PATH', plugin_dir_path( __FILE__ ) );
 }
+
+if ( ! defined( 'BBTF_TWITTER_URL' ) ) {
+	define( 'BBTF_TWITTER_URL', 'https://www.twitter.com' );
+}
+
+$twitterfeed = new Twitterfeed();
