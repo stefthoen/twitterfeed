@@ -47,6 +47,6 @@ The output looks something like this:
 - Higher resolution avatar images
 
 ## 0.4
-- Use better error handling: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
 - Put  API credentials in a WP admin setting
 - Use caching to save tweets
+- Shortcode support
