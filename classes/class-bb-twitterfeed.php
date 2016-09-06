@@ -39,6 +39,14 @@ class Twitterfeed {
 		$this->twitter_error->handle();
 	}
 
+	/**
+	 * Get collection of tweets from Twitter.
+	 *
+	 * @param array $credentials Twitter login credentials
+	 * @param array $user_args   Set of user arguments
+	 * @access private
+	 * @return array $tweets Collection of tweets
+	 */
 	private function get_tweets( $credentials, $user_args ) {
 		static $default_args = array(
 			'user' => '',
