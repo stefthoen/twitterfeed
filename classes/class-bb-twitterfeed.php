@@ -5,7 +5,7 @@ class Twitterfeed {
 	private $consumer_key = '';
 	private $consumer_secret = '';
 	private $profile_image_size;
-    public $mustache;
+	public $mustache;
 	public $twitter_error;
 
 	public function __construct() {
