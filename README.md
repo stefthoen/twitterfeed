@@ -4,7 +4,9 @@ BB-Twitterfeed is a WordPress plugin that gives you a Twitter feed without any s
 
 It uses [Twitter-API-1.1-Client-for-Wordpress](https://github.com/micc83/Twitter-API-1.1-Client-for-Wordpress/blob/master/class-wp-twitter-api.php) to connect to the Twitter api and uses [kwi-urllinker](https://bitbucket.org/kwi/urllinker) to find URL's in the tweets and turn them into links.
 
-Add and activate the plugin and use the following function in your template:
+Create a Twitter app and get credentials at [https://dev.twitter.com/apps](https://dev.twitter.com/apps).
+
+Add and activate the plugin and use the following code in your template:
 
 ```
 <?php 
@@ -16,10 +18,11 @@ $credentials = array(
 
 $args = array(
 	'user' => 'baardbaard',
-	'number_of_tweets' => 5
+	'number_of_tweets' => 5, // optional
+	'profile_image_size' => 'mini|normal|bigger|original', // optional, normal = default
 );
 
-bb_twitterfeed( $credentials, $args ); 
+bbtf()->create_feed( $credentials, $args );
 ?>
 ```
 
@@ -44,6 +47,6 @@ The output looks something like this:
 - Higher resolution avatar images
 
 ## 0.4
-- Use better error handling: http://code.tutsplus.com/tutorials/wordpress-error-handling-with-wp_error-class-i--cms-21120
 - Put  API credentials in a WP admin setting
 - Use caching to save tweets
+- Shortcode support
