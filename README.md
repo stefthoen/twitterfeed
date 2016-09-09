@@ -41,11 +41,6 @@ The output looks something like this:
 
 # Roadmap
 
-## 0.3
-- Refactor plugin to be fully OOP
-- Make classes replaceable with custom classes
-- Higher resolution avatar images
-
 ## 0.4
 - Put  API credentials in a WP admin setting
 - Use caching to save tweets
