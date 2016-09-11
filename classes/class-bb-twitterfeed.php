@@ -10,6 +10,9 @@ class Twitterfeed {
 
 	public function __construct() {
 		new I18n();
+		$submenu = new Submenu( new Submenu_Page );
+		$submenu->init();
+
 		$this->twitter_error = new Twitter_Error();
 		$this->mustache = new Mustache_Engine(array(
 			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
