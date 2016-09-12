@@ -8,7 +8,6 @@ class Settings {
 	/*
 	 * @param  Submenu_Page $submenu_page A reference to the class that
 	 *		   renders the page for the plugin.
-	 * @access public
 	 * @return void
 	 */
 	public function __construct( $settings_page ) {
@@ -22,7 +21,6 @@ class Settings {
 	/**
 	 * Adds a submenu for this plugin to the 'Tools' menu.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function init() {
@@ -34,11 +32,9 @@ class Settings {
 	 * Creates the submenu item and calls on the Submenu Page object to render
 	 * the actual contents of the page.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function add_options_page() {
-
 		add_options_page(
 			'BB-Twitterfeed Settings Page',
 			'BB-Twitterfeed',
@@ -49,11 +45,10 @@ class Settings {
 	}
 
 	/**
-	 * This function renders the contents of the page associated with the
-	 * Submenu that invokes the render method. In the context of this plugin,
-	 * this is the Submenu class.
+	 * Renders the contents of the page associated with the Submenu that invokes
+	 * the render method. In the context of this plugin, * this is the Submenu
+	 * class.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function render() {

@@ -25,7 +25,6 @@ class Twitterfeed {
 	 *
 	 * @param array $credentials Twitter API key and secret
 	 * @param array $user_args   Twitter user and number of tweets
-	 * @access public
 	 * @return void
 	 */
 	public function create_feed( $user_args ) {
@@ -47,7 +46,6 @@ class Twitterfeed {
 	 *
 	 * @param array $credentials Twitter login credentials
 	 * @param array $user_args   Set of user arguments
-	 * @access private
 	 * @return array $tweets Collection of tweets
 	 */
 	private function get_tweets( $user_args ) {
@@ -95,7 +93,6 @@ class Twitterfeed {
 	 * Convert tweets to an object with a array of tweet objects.
 	 *
 	 * @param array $unfiltered_tweets
-	 * @access private
 	 * @return object $tweets Tweets object that contains tweet objects
 	 */
 	private function filter_tweets( $unfiltered_tweets ) {
@@ -122,7 +119,6 @@ class Twitterfeed {
 	 * Get the Twitter list template.
 	 *
 	 * @param object $tweets
-	 * @access private
 	 * @return string Mustache template
 	 */
 	private function get_list( $tweets ) {

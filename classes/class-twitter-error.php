@@ -20,7 +20,6 @@ class Twitter_Error {
 	 *
 	 * @param string $error_title
 	 * @param string $error_message
-	 * @access public
 	 * @return void
 	 */
 	public function add( $error_title, $error_message ) {
@@ -30,7 +29,6 @@ class Twitter_Error {
 	/**
 	 * Print errors if we have them.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function handle() {

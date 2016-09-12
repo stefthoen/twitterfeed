@@ -9,7 +9,8 @@ class Tweet {
 	public $text;
 	public $created_at;
 
-	public function __construct( $screen_name, $user_name, $profile_image_url, $profile_image_size, $text, $created_at ) {
+	public function __construct( $screen_name, $user_name, $profile_image_url,
+		$profile_image_size, $text, $created_at ) {
 		$this->screen_name = $screen_name;
 		$this->user_name = $user_name;
 		$this->profile_image_url = $profile_image_url;
@@ -21,7 +22,6 @@ class Tweet {
 	/**
 	 * Get human readable timestamp.
 	 *
-	 * @access public
 	 * @return string Human readable timestamp
 	 */
 	public function get_date() {
@@ -36,7 +36,6 @@ class Tweet {
 	/**
 	 * Get the full URL to the Twitter profile.
 	 *
-	 * @access public
 	 * @return string Twitter profile URL
 	 */
 	public function get_profile_url() {
@@ -46,7 +45,6 @@ class Tweet {
 	/**
 	 * Gets the Twitter profile image with the correct size.
 	 *
-	 * @access public
 	 * @return string $url URL to Twitter profile image with requested size
 	 */
 	public function get_profile_image_url() {
@@ -73,7 +71,6 @@ class Tweet {
 	/**
 	 * Replaces hashtag and username with links.
 	 *
-	 * @access public
 	 * @return string $text The tweets text
 	 */
 	public function filter_text() {
