@@ -10,8 +10,8 @@ class Twitterfeed {
 
 	public function __construct() {
 		new I18n();
-		$submenu = new Submenu( new Submenu_Page );
-		$submenu->init();
+		$settings = new Settings( new Settings_Page );
+		$settings->init();
 
 		$this->twitter_error = new Twitter_Error();
 		$this->mustache = new Mustache_Engine(array(
@@ -28,10 +28,10 @@ class Twitterfeed {
 	 * @access public
 	 * @return void
 	 */
-	public function create_feed( $credentials, $user_args ) {
+	public function create_feed( $user_args ) {
 
 		$this->profile_image_size = $user_args['profile_image_size'];
-		$tweets = $this->get_tweets( $credentials, $user_args );
+		$tweets = $this->get_tweets( $user_args );
 
 		if ( ! empty($tweets) ) {
 			echo $this->get_list( $tweets );
@@ -50,7 +50,7 @@ class Twitterfeed {
 	 * @access private
 	 * @return array $tweets Collection of tweets
 	 */
-	private function get_tweets( $credentials, $user_args ) {
+	private function get_tweets( $user_args ) {
 		static $default_args = array(
 			'user' => '',
 			'number_of_tweets' => 5,
@@ -59,10 +59,16 @@ class Twitterfeed {
 
 		$args = array_merge( $default_args, $user_args );
 
-		if ( isset( $credentials ) ) {
+		$credentials = [
+			get_option('twitterfeed-key'),
+			get_option('twitterfeed-secret')
+		];
+
+		if ( ! empty( $credentials ) ) {
 			$twitter_api = new Wp_Twitter_Api( $credentials );
 		} else {
 			$this->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
+			return;
 		}
 
 		if ( empty( $args['user'] ) ) {

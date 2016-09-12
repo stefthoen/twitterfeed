@@ -1,0 +1,26 @@
+{{ process_post }}
+
+<div class="wrap">
+
+	<h2>{{ get_title }}</h2>
+
+	<form method="post">
+
+		<div class="options">
+			<p>
+			<label for="{{ key_input }}">{{ key_label }}</label>
+			<br />
+			<input type="text" id="{{ key_input }}" name="{{ key_input }}" value="{{ get_key }}" />
+			</p>
+			<p>
+			<label for="{{ secret_input }}">{{ secret_label }}</label>
+			<br />
+			<input type="text" id="{{ secret_input }}" name="{{ secret_input }}" value="{{ get_secret }}" />
+			</p>
+			{{{ get_nonce_field }}}
+			{{{ get_button }}}
+		</div>
+
+	</form>
+
+</div><!-- .wrap -->
