@@ -50,7 +50,6 @@ class Twitterfeed {
 	/**
 	 * Get collection of tweets from Twitter.
 	 *
-	 * @param array $credentials Twitter login credentials
 	 * @param array $user_args   Set of user arguments
 	 * @return array $tweets Collection of tweets
 	 */
