@@ -1,18 +1,21 @@
 <?php
 
+namespace Twitterfeed;
+
+use WP_Error;
+use Mustache_Engine;
+use Mustache_Loader_FilesystemLoader;
+
 class Twitter_Error {
 
 	public $errors;
 	public $error_messages;
 	public $heading;
+	private $mustache;
 
-	public function __construct() {
+	public function __construct( $mustache ) {
 		$this->errors = new WP_Error;
-
-		$this->mustache = new Mustache_Engine(array(
-			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
-			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
-		));
+		$this->mustache = $mustache;
 	}
 
 	/**
@@ -20,7 +23,6 @@ class Twitter_Error {
 	 *
 	 * @param string $error_title
 	 * @param string $error_message
-	 * @access public
 	 * @return void
 	 */
 	public function add( $error_title, $error_message ) {
@@ -30,7 +32,6 @@ class Twitter_Error {
 	/**
 	 * Print errors if we have them.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function handle() {

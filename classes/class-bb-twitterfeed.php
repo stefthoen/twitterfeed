@@ -1,5 +1,11 @@
 <?php
 
+namespace Twitterfeed;
+
+use Mustache_Engine;
+use Mustache_Loader_FilesystemLoader;
+use Wp_Twitter_Api;
+
 class Twitterfeed {
 
 	private $consumer_key = '';
@@ -9,12 +15,15 @@ class Twitterfeed {
 	public $twitter_error;
 
 	public function __construct() {
-		new I18n();
-		$this->twitter_error = new Twitter_Error();
 		$this->mustache = new Mustache_Engine(array(
 			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
 			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
 		));
+
+		new I18n();
+		$this->twitter_error = new Twitter_Error( $this->mustache );
+		$settings = new Settings( new Settings_Page, $this->mustache );
+		$settings->init();
 	}
 
 	/**
@@ -22,13 +31,12 @@ class Twitterfeed {
 	 *
 	 * @param array $credentials Twitter API key and secret
 	 * @param array $user_args   Twitter user and number of tweets
-	 * @access public
 	 * @return void
 	 */
-	public function create_feed( $credentials, $user_args ) {
+	public function create_feed( $user_args ) {
 
 		$this->profile_image_size = $user_args['profile_image_size'];
-		$tweets = $this->get_tweets( $credentials, $user_args );
+		$tweets = $this->get_tweets( $user_args );
 
 		if ( ! empty($tweets) ) {
 			echo $this->get_list( $tweets );
@@ -42,12 +50,10 @@ class Twitterfeed {
 	/**
 	 * Get collection of tweets from Twitter.
 	 *
-	 * @param array $credentials Twitter login credentials
 	 * @param array $user_args   Set of user arguments
-	 * @access private
 	 * @return array $tweets Collection of tweets
 	 */
-	private function get_tweets( $credentials, $user_args ) {
+	private function get_tweets( $user_args ) {
 		static $default_args = array(
 			'user' => '',
 			'number_of_tweets' => 5,
@@ -56,10 +62,16 @@ class Twitterfeed {
 
 		$args = array_merge( $default_args, $user_args );
 
-		if ( isset( $credentials ) ) {
+		$credentials = [
+			get_option('twitterfeed-key'),
+			get_option('twitterfeed-secret')
+		];
+
+		if ( ! empty( $credentials ) ) {
 			$twitter_api = new Wp_Twitter_Api( $credentials );
 		} else {
 			$this->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
+			return;
 		}
 
 		if ( empty( $args['user'] ) ) {
@@ -86,7 +98,6 @@ class Twitterfeed {
 	 * Convert tweets to an object with a array of tweet objects.
 	 *
 	 * @param array $unfiltered_tweets
-	 * @access private
 	 * @return object $tweets Tweets object that contains tweet objects
 	 */
 	private function filter_tweets( $unfiltered_tweets ) {
@@ -113,7 +124,6 @@ class Twitterfeed {
 	 * Get the Twitter list template.
 	 *
 	 * @param object $tweets
-	 * @access private
 	 * @return string Mustache template
 	 */
 	private function get_list( $tweets ) {
