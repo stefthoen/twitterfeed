@@ -5,14 +5,17 @@ namespace Twitterfeed;
 use Mustache_Engine;
 use Mustache_Loader_FilesystemLoader;
 
+// @todo: Add class docblock
 class Settings {
 
     private $settings_page;
 	private $mustache;
 
 	/*
-	 * @param  Submenu_Page $submenu_page A reference to the class that
-	 *		   renders the page for the plugin.
+	 * @param  Settings_Page $settings_page A reference to the class that
+	 *		   needs to be rendered.
+	 * @param  Mustache_Engine $mustache A reference to the class that
+	 *		   helps with rendering the page.
 	 * @return void
 	 */
 	public function __construct( $settings_page, $mustache ) {
@@ -42,14 +45,14 @@ class Settings {
 			'BB-Twitterfeed',
 			'manage_options',
 			'bb-twitterfeed',
-			array( $this, 'render' )
+			[ $this, 'render' ]
 		);
 	}
 
 	/**
-	 * Renders the contents of the page associated with the Submenu that invokes
-	 * the render method. In the context of this plugin, * this is the Submenu
-	 * class.
+	 * Renders the contents of the page associated with the settings that
+	 * invokes the render method. In the context of this plugin, this is the
+	 * Settings_Page class.
 	 *
 	 * @return void
 	 */

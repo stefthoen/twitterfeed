@@ -6,6 +6,7 @@ use WP_Error;
 use Mustache_Engine;
 use Mustache_Loader_FilesystemLoader;
 
+// @todo: Add docblocks
 class Twitter_Error {
 
 	public $errors;
@@ -32,6 +33,7 @@ class Twitter_Error {
 	/**
 	 * Print errors if we have them.
 	 *
+	 * @todo: Handle errors like class-wp-twitter-api.php
 	 * @return void
 	 */
 	public function handle() {
