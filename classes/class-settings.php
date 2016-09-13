@@ -7,20 +7,17 @@ use Mustache_Loader_FilesystemLoader;
 
 class Settings {
 
-	public $mustache;
-    public $settings_page;
+    private $settings_page;
+	private $mustache;
 
 	/*
 	 * @param  Submenu_Page $submenu_page A reference to the class that
 	 *		   renders the page for the plugin.
 	 * @return void
 	 */
-	public function __construct( $settings_page ) {
+	public function __construct( $settings_page, $mustache ) {
 		$this->settings_page = $settings_page;
-		$this->mustache = new Mustache_Engine(array(
-			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
-			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
-		));
+		$this->mustache = $mustache;
 	}
 
 	/**

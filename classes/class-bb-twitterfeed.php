@@ -15,15 +15,15 @@ class Twitterfeed {
 	public $twitter_error;
 
 	public function __construct() {
-		new I18n();
-		$settings = new Settings( new Settings_Page );
-		$settings->init();
-
-		$this->twitter_error = new Twitter_Error();
 		$this->mustache = new Mustache_Engine(array(
 			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
 			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
 		));
+
+		new I18n();
+		$this->twitter_error = new Twitter_Error( $this->mustache );
+		$settings = new Settings( new Settings_Page, $this->mustache );
+		$settings->init();
 	}
 
 	/**

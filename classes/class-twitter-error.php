@@ -11,14 +11,11 @@ class Twitter_Error {
 	public $errors;
 	public $error_messages;
 	public $heading;
+	private $mustache;
 
-	public function __construct() {
+	public function __construct( $mustache ) {
 		$this->errors = new WP_Error;
-
-		$this->mustache = new Mustache_Engine(array(
-			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
-			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
-		));
+		$this->mustache = $mustache;
 	}
 
 	/**
