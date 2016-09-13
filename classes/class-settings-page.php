@@ -1,5 +1,7 @@
 <?php
 
+namespace Twitterfeed;
+
 class Settings_Page {
 
 	public $key;

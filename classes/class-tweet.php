@@ -1,5 +1,7 @@
 <?php
 
+namespace Twitterfeed;
+
 class Tweet {
 
 	public $screen_name;

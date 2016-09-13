@@ -23,6 +23,10 @@
  * GNU General Public License for more details.
  */
 
+namespace Twitterfeed;
+
+use Twitterfeed\Twitterfeed;
+
 require_once( 'vendor/autoload.php' );
 
 if ( ! defined( 'BBTF_PATH' ) ) {

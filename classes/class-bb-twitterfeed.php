@@ -1,5 +1,11 @@
 <?php
 
+namespace Twitterfeed;
+
+use Mustache_Engine;
+use Mustache_Loader_FilesystemLoader;
+use Wp_Twitter_Api;
+
 class Twitterfeed {
 
 	private $consumer_key = '';

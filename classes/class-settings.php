@@ -1,5 +1,10 @@
 <?php
 
+namespace Twitterfeed;
+
+use Mustache_Engine;
+use Mustache_Loader_FilesystemLoader;
+
 class Settings {
 
 	public $mustache;

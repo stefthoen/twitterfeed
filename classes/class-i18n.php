@@ -1,5 +1,7 @@
 <?php
 
+namespace Twitterfeed;
+
 class I18n {
 
 	public function __construct() {

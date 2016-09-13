@@ -1,5 +1,11 @@
 <?php
 
+namespace Twitterfeed;
+
+use WP_Error;
+use Mustache_Engine;
+use Mustache_Loader_FilesystemLoader;
+
 class Twitter_Error {
 
 	public $errors;
