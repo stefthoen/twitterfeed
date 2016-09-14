@@ -43,8 +43,6 @@ class Twitterfeed {
 
 		if ( $tweets ) {
 			echo $this->get_list( $tweets );
-		} else {
-			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
 		}
 
 		$this->twitter_error->handle();
@@ -84,6 +82,8 @@ class Twitterfeed {
 		$tweets = $twitter_api->query( $query );
 
 		if ( empty( $tweets ) ) {
+			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
+
 			return false;
 		}
 
