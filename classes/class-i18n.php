@@ -2,6 +2,7 @@
 
 namespace Twitterfeed;
 
+// @todo: Add class docblock
 class I18n {
 
 	public function __construct() {

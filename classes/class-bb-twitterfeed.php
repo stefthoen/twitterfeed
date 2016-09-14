@@ -8,8 +8,8 @@ use Wp_Twitter_Api;
 
 class Twitterfeed {
 
+	public $twitter_error; // @todo: Why is this public?
 	private $mustache;
-	public $twitter_error;
 	private $user;
 	private $number_of_tweets;
 	private $profile_image_size;
@@ -33,6 +33,7 @@ class Twitterfeed {
 	/**
 	 * Get users latest tweets and outputs an unordered list.
 	 *
+	 * @todo: Should $user_args be a constructor parameter?
 	 * @param array $user_args Twitter user and number of tweets
 	 * @return void
 	 */
@@ -126,7 +127,7 @@ class Twitterfeed {
 	}
 
 	/**
-	 * Returns Twitter API credentials
+	 * Returns Twitter API credentials.
 	 *
 	 * @access private
 	 * @return array
