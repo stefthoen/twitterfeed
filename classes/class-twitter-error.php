@@ -17,6 +17,7 @@ class Twitter_Error {
 	public function __construct( $mustache ) {
 		$this->errors = new WP_Error;
 		$this->mustache = $mustache;
+		$this->heading = __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' );
 	}
 
 	/**
@@ -37,7 +38,6 @@ class Twitter_Error {
 	 * @return void
 	 */
 	public function handle() {
-		$this->heading = __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' );
 		$this->error_messages = $this->errors->get_error_messages();
 
 		if ( !empty ( $this->error_messages ) ) {
