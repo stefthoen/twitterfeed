@@ -6,6 +6,9 @@ use WP_Error;
 use Mustache_Engine;
 use Mustache_Loader_FilesystemLoader;
 
+/**
+ * Wrapper around the WP_Error class.
+ */
 class Twitter_Error {
 
 	public $errors;
@@ -13,9 +16,17 @@ class Twitter_Error {
 	public $heading;
 	private $mustache;
 
-	public function __construct( $mustache ) {
+	/**
+	 * Creates an instance of Twitter_Error and assigns a Mustache template for
+	 * rendering of the errors.
+	 *
+	 * @param Mustache_Engine $mustache
+	 * @return void
+	 */
+	public function __construct( Mustache_Engine $mustache ) {
 		$this->errors = new WP_Error;
 		$this->mustache = $mustache;
+		$this->heading = __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' );
 	}
 
 	/**
@@ -30,12 +41,11 @@ class Twitter_Error {
 	}
 
 	/**
-	 * Print errors if we have them.
+	 * Uses the mustache template to print errors if we have them.
 	 *
 	 * @return void
 	 */
 	public function handle() {
-		$this->heading = __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' );
 		$this->error_messages = $this->errors->get_error_messages();
 
 		if ( !empty ( $this->error_messages ) ) {

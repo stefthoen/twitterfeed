@@ -2,6 +2,9 @@
 
 namespace Twitterfeed;
 
+/**
+ * Handles internatiolisation of the plugin.
+ */
 class I18n {
 
 	public function __construct() {
