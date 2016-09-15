@@ -119,7 +119,7 @@ class Twitterfeed {
 		$tweets = new Tweets();
 
 		$tweets->tweets = array_map( function( $unfiltered_tweet ) {
-			$tweet = new Tweet(
+			return new Tweet(
 				$unfiltered_tweet->user->screen_name,
 				$unfiltered_tweet->user->name,
 				$unfiltered_tweet->user->profile_image_url_https,
@@ -127,9 +127,6 @@ class Twitterfeed {
 				$unfiltered_tweet->text,
 				$unfiltered_tweet->created_at
 			);
-
-			return $tweet;
-
 		}, $unfiltered_tweets );
 
 		return $tweets;
