@@ -6,16 +6,43 @@ use Mustache_Engine;
 use Mustache_Loader_FilesystemLoader;
 use Wp_Twitter_Api;
 
+/**
+ * Twitterfeed
+ *
+ * Gets tweets from the Twitter API and prints them. Uses Mustache to create
+ * templates.
+ */
 class Twitterfeed {
 
-	public $twitter_error; // @todo: Why is this public?
+	private $twitter_error;
 	private $mustache;
+	private $settings;
+
 	private $user;
 	private $number_of_tweets;
 	private $profile_image_size;
 
+	/**
+	 * Creates an instance of the Twitterfeed class and sets default values for
+	 * number of tweets and profile image size.
+	 *
+	 * Creates an instance of the Mustache template engine that's used to render
+	 * the list of tweets, but is also injected as an dependency when it
+	 * creates an instance of the Twitter_Error and the Settings class.
+	 *
+	 * Creates an instance of the I18n class that handles plugin
+	 * internationalisation.
+	 *
+	 * Creates an instance of the Twitter_Error class that's used as a wrapper
+	 * around the WP_Error class.
+	 *
+	 * Creates an instance of the Settings class that's used to create a
+	 * settings page in the WordPress dashboard.
+	 *
+	 * @return void
+	 */
 	public function __construct() {
-		$this->user = '';
+		//
 		$this->number_of_tweets = 5;
 		$this->profile_image_size = 'normal';
 
@@ -33,8 +60,8 @@ class Twitterfeed {
 	/**
 	 * Get users latest tweets and outputs an unordered list.
 	 *
-	 * @todo: Should $user_args be a constructor parameter?
-	 * @param array $user_args Twitter user and number of tweets
+	 * @param array $feed_attributes Twitter user, number of tweets and profile
+	 *                               image size.
 	 * @return void
 	 */
 	public function create_feed( $user_args ) {
@@ -49,10 +76,10 @@ class Twitterfeed {
 	}
 
 	/**
-	 * Get collection of tweets from Twitter.
+	 * Get tweets from the Twitter API.
 	 *
-	 * @param array $user_args Set of user arguments
-	 * @return mixed $tweets False or collection of tweets
+	 * @return mixed $tweets Collection of tweets, if no tweets, then returns
+	 *                       false.
 	 */
 	private function get_tweets( $user_args ) {
 		$default_args = [
@@ -91,7 +118,7 @@ class Twitterfeed {
 	}
 
 	/**
-	 * Convert tweets to an object with a array of tweet objects.
+	 * Convert tweets to an object with an array of tweet objects.
 	 *
 	 * @param array $unfiltered_tweets
 	 * @return object $tweets Tweets object that contains tweet objects
@@ -127,10 +154,11 @@ class Twitterfeed {
 	}
 
 	/**
-	 * Returns Twitter API credentials.
+	 * Set the Twitter API attributes that we use to query the Twitter API.
 	 *
-	 * @access private
-	 * @return array
+	 * @param array $feed_attributes Attributes that we use to query the Twitter
+	 *                               API.
+	 * @return void
 	 */
 	private function get_credentials() {
 		return [
