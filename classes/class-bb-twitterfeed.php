@@ -14,13 +14,13 @@ use Wp_Twitter_Api;
  */
 class Twitterfeed {
 
-	private $twitter_error;
-	private $mustache;
-	private $settings;
-
 	private $user;
 	private $number_of_tweets;
 	private $profile_image_size;
+
+	private $twitter_error;
+	private $mustache;
+	private $settings;
 
 	/**
 	 * Creates an instance of the Twitterfeed class and sets default values for
@@ -52,9 +52,11 @@ class Twitterfeed {
 		] );
 
 		new I18n();
+
 		$this->twitter_error = new Twitter_Error( $this->mustache );
-		$settings = new Settings( new Settings_Page, $this->mustache );
-		$settings->init();
+
+		$this->settings = new Settings( new Settings_Page, $this->mustache );
+		$this->settings->init();
 	}
 
 	/**
@@ -64,11 +66,10 @@ class Twitterfeed {
 	 *                               image size.
 	 * @return void
 	 */
-	public function create_feed( $user_args ) {
-		$this->profile_image_size = $user_args['profile_image_size'];
-		$tweets = $this->get_tweets( $user_args );
+	public function create_feed( $feed_attributes ) {
+		$this->set_feed_attributes( $feed_attributes );
 
-		if ( $tweets ) {
+		if ( $tweets = $this->get_tweets() ) {
 			echo $this->get_list( $tweets );
 		}
 
@@ -81,29 +82,21 @@ class Twitterfeed {
 	 * @return mixed $tweets Collection of tweets, if no tweets, then returns
 	 *                       false.
 	 */
-	private function get_tweets( $user_args ) {
-		$default_args = [
-			'user'               => $this->user,
-			'number_of_tweets'   => $this->number_of_tweets,
-			'profile_image_size' => $this->profile_image_size
-		];
-
-		$args = array_merge( $default_args, $user_args );
-
-		$credentials = $this->get_credentials();
+	private function get_tweets() {
+		$credentials = $this->settings->get_credentials();
 		$twitter_api = new Wp_Twitter_Api( $credentials );
 
 		if ( empty( $credentials ) ) {
 			$this->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
 		}
 
-		if ( empty( $args['user'] ) ) {
+		if ( empty( $this->user ) ) {
 			$this->twitter_error->add( 'username', __( 'No username provided.', 'bb-twitterfeed' ) );
 		}
 
 		$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
-			$args['number_of_tweets'],
-			$args['user']
+			$this->number_of_tweets,
+			$this->user
 		);
 
 		$tweets = $twitter_api->query( $query );
@@ -160,10 +153,10 @@ class Twitterfeed {
 	 *                               API.
 	 * @return void
 	 */
-	private function get_credentials() {
-		return [
-			get_option( 'twitterfeed-key' ),
-			get_option( 'twitterfeed-secret' )
-		];
+	private function set_feed_attributes( $feed_attributes ) {
+		foreach ( $feed_attributes as $key => $value ) {
+			$this->$key = $value;
+		}
 	}
+
 }
