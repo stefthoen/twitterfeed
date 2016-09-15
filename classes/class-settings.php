@@ -60,4 +60,16 @@ class Settings {
 		echo $this->mustache->render( 'settings', $this->settings_page );
 	}
 
+	/**
+	 * Returns Twitter API credentials.
+	 *
+	 * @return array Array containing Twitter API key and secret
+	 */
+	public function get_credentials() {
+		return [
+			get_option( 'twitterfeed-key' ),
+			get_option( 'twitterfeed-secret' )
+		];
+	}
+
 }
