@@ -1,5 +1,8 @@
 <?php
 
+namespace Twitterfeed;
+
+// @todo: Add class docblock
 class I18n {
 
 	public function __construct() {
@@ -9,7 +12,6 @@ class I18n {
 	/**
 	 * Hooks to call on init.
 	 *
-	 * @access private
 	 * @return void
 	 */
 	private function init() {
@@ -19,7 +21,6 @@ class I18n {
 	/**
 	 * Load the plugin's translated strings.
 	 *
-	 * @access public
 	 * @return void
 	 */
 	public function load_textdomain() {
