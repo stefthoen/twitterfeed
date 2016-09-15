@@ -38,8 +38,6 @@ class Twitterfeed {
 	 *
 	 * Creates an instance of the Settings class that's used to create a
 	 * settings page in the WordPress dashboard.
-	 *
-	 * @return void
 	 */
 	public function __construct() {
 		$this->number_of_tweets = 5;
@@ -61,9 +59,7 @@ class Twitterfeed {
 	/**
 	 * Get users latest tweets and outputs an unordered list.
 	 *
-	 * @param array $feed_attributes Twitter user, number of tweets and profile
-	 *                               image size.
-	 * @return void
+	 * @param  array $feed_attributes
 	 */
 	public function create_feed( $feed_attributes ) {
 		$this->set_feed_attributes( $feed_attributes );
@@ -78,8 +74,7 @@ class Twitterfeed {
 	/**
 	 * Get tweets from the Twitter API.
 	 *
-	 * @return mixed $tweets Array of tweets, if no tweets, then returns
-	 *                       false.
+	 * @return Tweets|boolean
 	 */
 	private function get_tweets() {
 		$credentials = $this->settings->get_credentials();
@@ -113,7 +108,7 @@ class Twitterfeed {
 	 * Convert tweets to an object with an array of tweet objects.
 	 *
 	 * @param  array  $unfiltered_tweets
-	 * @return Tweets $tweets Tweets object that contains the tweets.
+	 * @return Tweets $tweets
 	 */
 	private function filter_tweets( array $unfiltered_tweets ) {
 		$tweets = new Tweets();
@@ -133,10 +128,10 @@ class Twitterfeed {
 	}
 
 	/**
-	 * Get the Twitter list template.
+	 * Get tweets in a HTML UL element.
 	 *
 	 * @param  Tweets $tweets
-	 * @return string String of the HTML for the Twitter list.
+	 * @return string
 	 */
 	private function get_list( Tweets $tweets ) {
 		return $this->mustache->render( 'tweets', $tweets );
@@ -145,9 +140,7 @@ class Twitterfeed {
 	/**
 	 * Set the Twitter API attributes that we use to query the Twitter API.
 	 *
-	 * @param array $feed_attributes Attributes that we use to query the Twitter
-	 *                               API.
-	 * @return void
+	 * @param  array $feed_attributes
 	 */
 	private function set_feed_attributes( array $feed_attributes ) {
 		foreach ( $feed_attributes as $key => $value ) {

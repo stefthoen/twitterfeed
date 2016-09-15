@@ -21,7 +21,6 @@ class Twitter_Error {
 	 * rendering of the errors.
 	 *
 	 * @param Mustache_Engine $mustache
-	 * @return void
 	 */
 	public function __construct( Mustache_Engine $mustache ) {
 		$this->errors = new WP_Error;
@@ -34,7 +33,6 @@ class Twitter_Error {
 	 *
 	 * @param string $error_title
 	 * @param string $error_message
-	 * @return void
 	 */
 	public function add( $error_title, $error_message ) {
 		$this->errors->add( $error_title, $error_message );
@@ -42,8 +40,6 @@ class Twitter_Error {
 
 	/**
 	 * Uses the mustache template to print errors if we have them.
-	 *
-	 * @return void
 	 */
 	public function handle() {
 		$this->error_messages = $this->errors->get_error_messages();

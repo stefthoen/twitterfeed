@@ -13,8 +13,6 @@ class I18n {
 
 	/**
 	 * Hooks to call on init.
-	 *
-	 * @return void
 	 */
 	private function init() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
@@ -22,8 +20,6 @@ class I18n {
 
 	/**
 	 * Load the plugin's translated strings.
-	 *
-	 * @return void
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( 'bb-twitterfeed', false, plugin_basename( BBTF_PATH ) . '/languages/' );
