@@ -62,17 +62,20 @@ class Tweet {
 		$size = $this->profile_image_size;
 
 		switch ( $size ) {
-		case 'original':
-			$url = str_replace( '_normal', '', $url );
-			break;
-		case 'mini':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		case 'bigger':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		default:
-			break;
+			case 'original':
+				$url = str_replace( '_normal', '', $url );
+				break;
+
+			case 'mini':
+				$url = str_replace( 'normal', $size, $url );
+				break;
+
+			case 'bigger':
+				$url = str_replace( 'normal', $size, $url );
+				break;
+
+			default:
+				break;
 		}
 
 		return $url;
