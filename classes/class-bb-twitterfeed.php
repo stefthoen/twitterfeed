@@ -42,7 +42,6 @@ class Twitterfeed {
 	 * @return void
 	 */
 	public function __construct() {
-		//
 		$this->number_of_tweets = 5;
 		$this->profile_image_size = 'normal';
 
