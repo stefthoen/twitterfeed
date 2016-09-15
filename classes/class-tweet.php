@@ -2,7 +2,9 @@
 
 namespace Twitterfeed;
 
-// @todo: Add docblocks
+/**
+ * Tweet data object for the Tweet Mustache template.
+ */
 class Tweet {
 
 	public $screen_name;
@@ -12,6 +14,11 @@ class Tweet {
 	public $text;
 	public $created_at;
 
+	/**
+	 * Creates a Tweet with all the necessary tweet properties.
+	 *
+	 * @return void
+	 */
 	public function __construct( $screen_name, $user_name, $profile_image_url,
 		$profile_image_size, $text, $created_at ) {
 		$this->screen_name = $screen_name;
@@ -23,9 +30,9 @@ class Tweet {
 	}
 
 	/**
-	 * Get human readable timestamp.
+	 * Returns a human readable timestamp.
 	 *
-	 * @return string Human readable timestamp
+	 * @return string Human readable timestamp.
 	 */
 	public function get_date() {
 		return sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
@@ -37,18 +44,18 @@ class Tweet {
 	}
 
 	/**
-	 * Get the full URL to the Twitter profile.
+	 * Returns the full URL to the users Twitter profile.
 	 *
-	 * @return string Twitter profile URL
+	 * @return string Twitter profile URL.
 	 */
 	public function get_profile_url() {
 		return BBTF_TWITTER_URL . '/' . $this->screen_name;
 	}
 
 	/**
-	 * Gets the Twitter profile image with the correct size.
+	 * Returns the Twitter profile image with the correct size.
 	 *
-	 * @return string $url URL to Twitter profile image with requested size
+	 * @return string $url URL to Twitter profile image with requested size.
 	 */
 	public function get_profile_image_url() {
 		$url = $this->profile_image_url;
@@ -74,7 +81,7 @@ class Tweet {
 	/**
 	 * Replaces hashtag and username with links.
 	 *
-	 * @return string $text The tweets text
+	 * @return string $text Filtered tweet text.
 	 */
 	public function filter_text() {
 		$text = htmlEscapeAndLinkUrls( $this->text );

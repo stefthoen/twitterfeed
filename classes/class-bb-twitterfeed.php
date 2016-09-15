@@ -78,7 +78,7 @@ class Twitterfeed {
 	/**
 	 * Get tweets from the Twitter API.
 	 *
-	 * @return mixed $tweets Collection of tweets, if no tweets, then returns
+	 * @return mixed $tweets Array of tweets, if no tweets, then returns
 	 *                       false.
 	 */
 	private function get_tweets() {
@@ -112,8 +112,8 @@ class Twitterfeed {
 	/**
 	 * Convert tweets to an object with an array of tweet objects.
 	 *
-	 * @param array $unfiltered_tweets
-	 * @return object $tweets Tweets object that contains tweet objects
+	 * @param  array  $unfiltered_tweets
+	 * @return Tweets $tweets Tweets object that contains the tweets.
 	 */
 	private function filter_tweets( $unfiltered_tweets ) {
 		$tweets = new Tweets();
@@ -135,8 +135,8 @@ class Twitterfeed {
 	/**
 	 * Get the Twitter list template.
 	 *
-	 * @param object $tweets
-	 * @return string Mustache template
+	 * @param  Tweets $tweets
+	 * @return string String of the HTML for the Twitter list.
 	 */
 	private function get_list( $tweets ) {
 		return $this->mustache->render( 'tweets', $tweets );

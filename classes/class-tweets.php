@@ -2,7 +2,9 @@
 
 namespace Twitterfeed;
 
-// @todo: Add docblock
+/**
+ * Collection of tweets.
+ */
 class Tweets {
 
 	public $tweets = [];

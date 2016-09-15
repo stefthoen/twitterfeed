@@ -5,13 +5,18 @@ namespace Twitterfeed;
 use Mustache_Engine;
 use Mustache_Loader_FilesystemLoader;
 
-// @todo: Add class docblock
+/**
+ * Handles settings and creates a WordPress dashboard settings page where user
+ * can enter Twitter API key and secret.
+ */
 class Settings {
 
     private $settings_page;
 	private $mustache;
 
 	/*
+	 * Creates a Settings object with a WordPress Admin settings page.
+	 *
 	 * @param  Settings_Page $settings_page A reference to the class that
 	 *		   needs to be rendered.
 	 * @param  Mustache_Engine $mustache A reference to the class that
@@ -31,7 +36,6 @@ class Settings {
 	public function init() {
 		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
 	}
-
 
 	/**
 	 * Creates the submenu item and calls on the Submenu Page object to render
