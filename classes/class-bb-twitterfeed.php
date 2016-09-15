@@ -115,7 +115,7 @@ class Twitterfeed {
 	 * @param  array  $unfiltered_tweets
 	 * @return Tweets $tweets Tweets object that contains the tweets.
 	 */
-	private function filter_tweets( $unfiltered_tweets ) {
+	private function filter_tweets( array $unfiltered_tweets ) {
 		$tweets = new Tweets();
 
 		$tweets->tweets = array_map( function( $unfiltered_tweet ) {
@@ -138,7 +138,7 @@ class Twitterfeed {
 	 * @param  Tweets $tweets
 	 * @return string String of the HTML for the Twitter list.
 	 */
-	private function get_list( $tweets ) {
+	private function get_list( Tweets $tweets ) {
 		return $this->mustache->render( 'tweets', $tweets );
 	}
 
@@ -149,7 +149,7 @@ class Twitterfeed {
 	 *                               API.
 	 * @return void
 	 */
-	private function set_feed_attributes( $feed_attributes ) {
+	private function set_feed_attributes( array $feed_attributes ) {
 		foreach ( $feed_attributes as $key => $value ) {
 			$this->$key = $value;
 		}

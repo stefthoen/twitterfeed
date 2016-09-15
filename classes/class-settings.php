@@ -23,7 +23,7 @@ class Settings {
 	 *		   helps with rendering the page.
 	 * @return void
 	 */
-	public function __construct( $settings_page, $mustache ) {
+	public function __construct( Settings_Page $settings_page, Mustache_Engine $mustache ) {
 		$this->settings_page = $settings_page;
 		$this->mustache = $mustache;
 	}
