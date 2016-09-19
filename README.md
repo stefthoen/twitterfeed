@@ -6,6 +6,8 @@ It uses [Twitter-API-1.1-Client-for-Wordpress](https://github.com/micc83/Twitter
 
 Create a Twitter app and get credentials at [https://dev.twitter.com/apps](https://dev.twitter.com/apps).
 
+Run `composer install` in the root of the plugin folder.
+
 Add and activate the plugin and use the following code in your template:
 
 ```
@@ -22,7 +24,7 @@ $args = array(
 	'profile_image_size' => 'mini|normal|bigger|original', // optional, normal = default
 );
 
-bbtf()->create_feed( $credentials, $args );
+$twitterfeed->create_feed( $credentials, $args );
 ?>
 ```
 
