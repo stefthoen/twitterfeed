@@ -49,7 +49,7 @@ class Twitterfeed {
 		] );
 
 		new I18n();
-
+		$this->shortcode = new Shortcode( $this );
 		$this->twitter_error = new Twitter_Error( $this->mustache );
 
 		$this->settings = new Settings( new Settings_Page, $this->mustache );
