@@ -16,8 +16,6 @@ class Tweet {
 
 	/**
 	 * Creates a Tweet with all the necessary tweet properties.
-	 *
-	 * @return void
 	 */
 	public function __construct( $screen_name, $user_name, $profile_image_url,
 		$profile_image_size, $text, $created_at ) {
@@ -32,7 +30,7 @@ class Tweet {
 	/**
 	 * Returns a human readable timestamp.
 	 *
-	 * @return string Human readable timestamp.
+	 * @return string
 	 */
 	public function get_date() {
 		return sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
@@ -46,7 +44,7 @@ class Tweet {
 	/**
 	 * Returns the full URL to the users Twitter profile.
 	 *
-	 * @return string Twitter profile URL.
+	 * @return string
 	 */
 	public function get_profile_url() {
 		return BBTF_TWITTER_URL . '/' . $this->screen_name;
@@ -55,24 +53,27 @@ class Tweet {
 	/**
 	 * Returns the Twitter profile image with the correct size.
 	 *
-	 * @return string $url URL to Twitter profile image with requested size.
+	 * @return string
 	 */
 	public function get_profile_image_url() {
 		$url = $this->profile_image_url;
 		$size = $this->profile_image_size;
 
 		switch ( $size ) {
-		case 'original':
-			$url = str_replace( '_normal', '', $url );
-			break;
-		case 'mini':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		case 'bigger':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		default:
-			break;
+			case 'original':
+				$url = str_replace( '_normal', '', $url );
+				break;
+
+			case 'mini':
+				$url = str_replace( 'normal', $size, $url );
+				break;
+
+			case 'bigger':
+				$url = str_replace( 'normal', $size, $url );
+				break;
+
+			default:
+				break;
 		}
 
 		return $url;
@@ -81,7 +82,7 @@ class Tweet {
 	/**
 	 * Replaces hashtag and username with links.
 	 *
-	 * @return string $text Filtered tweet text.
+	 * @return string
 	 */
 	public function filter_text() {
 		$text = htmlEscapeAndLinkUrls( $this->text );
