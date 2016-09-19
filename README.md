@@ -17,8 +17,17 @@ $args = array(
 	'profile_image_size' => 'mini|normal|bigger|original', // optional, normal = default
 );
 
-$twitterfeed->create_feed( $credentials, $args );
+$twitterfeed->create_feed( $args );
 ?>
+```
+
+Or you can also use the shortcode:
+```
+// Add this to your page/post/widget in your WYSIWYG editor.
+[twitterfeed user="cnn" number_of_tweets="3" profile_image_size="bigger"]
+
+// Or use this in your template files.
+echo do_shortcode( '[twitterfeed user="cnn" number_of_tweets="3" profile_image_size="bigger"]' );
 ```
 
 The output looks something like this:
