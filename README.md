@@ -45,10 +45,6 @@ The output looks something like this:
 
 # Roadmap
 
-## 0.4
-- Put  API credentials in a WP admin setting
-- Shortcode support
-
 ## 0.5
 - Make classes replaceable with custom classes
 - Use caching to save tweets
