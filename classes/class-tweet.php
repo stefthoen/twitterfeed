@@ -9,10 +9,10 @@ class Tweet {
 
 	public $screen_name;
 	public $user_name;
-	public $profile_image_url;
 	public $profile_image_size;
 	public $text;
 	public $created_at;
+	private $profile_image_url;
 
 	/**
 	 * Creates a Tweet with all the necessary tweet properties.
@@ -55,7 +55,7 @@ class Tweet {
 	 *
 	 * @return string
 	 */
-	public function get_profile_image_url() {
+	public function get_profile_image_url_with_size() {
 		$url = $this->profile_image_url;
 		$size = $this->profile_image_size;
 
