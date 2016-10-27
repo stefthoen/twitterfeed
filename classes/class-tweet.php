@@ -32,7 +32,7 @@ class Tweet {
 	 *
 	 * @return string
 	 */
-	public function get_date() {
+	public function get_time_ago() {
 		return sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
 			human_time_diff(
 				strtotime( $this->created_at ),
