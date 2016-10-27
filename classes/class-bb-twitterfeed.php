@@ -1,99 +1,120 @@
 <?php
 
+namespace Twitterfeed;
+
+use Mustache_Engine;
+use Mustache_Loader_FilesystemLoader;
+use Wp_Twitter_Api;
+
+/**
+ * Twitterfeed
+ *
+ * Gets tweets from the Twitter API and prints them. Uses Mustache to create
+ * templates.
+ */
 class Twitterfeed {
 
-	private $consumer_key = '';
-	private $consumer_secret = '';
+	private $user;
+	private $number_of_tweets;
 	private $profile_image_size;
-	public $mustache;
-	public $twitter_error;
 
+	private $twitter_error;
+	private $mustache;
+	private $settings;
+
+	/**
+	 * Creates an instance of the Twitterfeed class and sets default values for
+	 * number of tweets and profile image size.
+	 *
+	 * Creates an instance of the Mustache template engine that's used to render
+	 * the list of tweets, but is also injected as an dependency when it
+	 * creates an instance of the Twitter_Error and the Settings class.
+	 *
+	 * Creates an instance of the I18n class that handles plugin
+	 * internationalisation.
+	 *
+	 * Creates an instance of the Twitter_Error class that's used as a wrapper
+	 * around the WP_Error class.
+	 *
+	 * Creates an instance of the Settings class that's used to create a
+	 * settings page in the WordPress dashboard.
+	 */
 	public function __construct() {
-		new I18n();
-		$this->twitter_error = new Twitter_Error();
-		$this->mustache = new Mustache_Engine(array(
+		$this->number_of_tweets = 5;
+		$this->profile_image_size = 'normal';
+
+		$this->mustache = new Mustache_Engine( [
 			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
 			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
-		));
+		] );
+
+		new I18n();
+		$this->shortcode = new Shortcode( $this );
+		$this->twitter_error = new Twitter_Error( $this->mustache );
+
+		$this->settings = new Settings( new Settings_Page, $this->mustache );
+		$this->settings->init();
 	}
 
 	/**
 	 * Get users latest tweets and outputs an unordered list.
 	 *
-	 * @param array $credentials Twitter API key and secret
-	 * @param array $user_args   Twitter user and number of tweets
-	 * @access public
-	 * @return void
+	 * @param  array $feed_attributes
 	 */
-	public function create_feed( $credentials, $user_args ) {
+	public function create_feed( $feed_attributes ) {
+		$this->set_feed_attributes( $feed_attributes );
 
-		$this->profile_image_size = $user_args['profile_image_size'];
-		$tweets = $this->get_tweets( $credentials, $user_args );
-
-		if ( ! empty($tweets) ) {
+		if ( $tweets = $this->get_tweets() ) {
 			echo $this->get_list( $tweets );
-		} else {
-			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
 		}
 
 		$this->twitter_error->handle();
 	}
 
 	/**
-	 * Get collection of tweets from Twitter.
+	 * Get tweets from the Twitter API.
 	 *
-	 * @param array $credentials Twitter login credentials
-	 * @param array $user_args   Set of user arguments
-	 * @access private
-	 * @return array $tweets Collection of tweets
+	 * @return Tweets|boolean
 	 */
-	private function get_tweets( $credentials, $user_args ) {
-		static $default_args = array(
-			'user' => '',
-			'number_of_tweets' => 5,
-			'profile_image_size' => 'normal'
-		);
+	private function get_tweets() {
+		$credentials = $this->settings->get_credentials();
+		$twitter_api = new Wp_Twitter_Api( $credentials );
 
-		$args = array_merge( $default_args, $user_args );
-
-		if ( isset( $credentials ) ) {
-			$twitter_api = new Wp_Twitter_Api( $credentials );
-		} else {
+		if ( empty( $credentials ) ) {
 			$this->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
 		}
 
-		if ( empty( $args['user'] ) ) {
+		if ( empty( $this->user ) ) {
 			$this->twitter_error->add( 'username', __( 'No username provided.', 'bb-twitterfeed' ) );
 		}
 
 		$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
-			$args['number_of_tweets'],
-			$args['user']
+			$this->number_of_tweets,
+			$this->user
 		);
 
 		$tweets = $twitter_api->query( $query );
 
 		if ( empty( $tweets ) ) {
-			return;
+			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
+
+			return false;
 		}
 
-		$tweets = $this->filter_tweets( $tweets );
-
-		return $tweets;
+		return $this->filter_tweets( $tweets );
 	}
 
 	/**
-	 * Convert tweets to an object with a array of tweet objects.
+	 * Convert tweets to an object with an array of tweet objects.
 	 *
-	 * @param array $unfiltered_tweets
-	 * @access private
-	 * @return object $tweets Tweets object that contains tweet objects
+	 * @param  array  $unfiltered_tweets
+	 * @return Tweets $tweets
 	 */
-	private function filter_tweets( $unfiltered_tweets ) {
+	private function filter_tweets( array $unfiltered_tweets ) {
 		$tweets = new Tweets();
 
 		$tweets->tweets = array_map( function( $unfiltered_tweet ) {
-			$tweet = new Tweet(
+			return new Tweet(
 				$unfiltered_tweet->user->screen_name,
 				$unfiltered_tweet->user->name,
 				$unfiltered_tweet->user->profile_image_url_https,
@@ -101,22 +122,30 @@ class Twitterfeed {
 				$unfiltered_tweet->text,
 				$unfiltered_tweet->created_at
 			);
-
-			return $tweet;
-
 		}, $unfiltered_tweets );
 
 		return $tweets;
 	}
 
 	/**
-	 * Get the Twitter list template.
+	 * Get tweets in a HTML UL element.
 	 *
-	 * @param object $tweets
-	 * @access private
-	 * @return string Mustache template
+	 * @param  Tweets $tweets
+	 * @return string
 	 */
-	private function get_list( $tweets ) {
+	private function get_list( Tweets $tweets ) {
 		return $this->mustache->render( 'tweets', $tweets );
 	}
+
+	/**
+	 * Set the Twitter API attributes that we use to query the Twitter API.
+	 *
+	 * @param  array $feed_attributes
+	 */
+	private function set_feed_attributes( array $feed_attributes ) {
+		foreach ( $feed_attributes as $key => $value ) {
+			$this->$key = $value;
+		}
+	}
+
 }

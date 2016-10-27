@@ -1,15 +1,24 @@
 <?php
 
+namespace Twitterfeed;
+
+/**
+ * Tweet data object for the Tweet Mustache template.
+ */
 class Tweet {
 
 	public $screen_name;
 	public $user_name;
-	public $profile_image_url;
 	public $profile_image_size;
 	public $text;
 	public $created_at;
+	private $profile_image_url;
 
-	public function __construct( $screen_name, $user_name, $profile_image_url, $profile_image_size, $text, $created_at ) {
+	/**
+	 * Creates a Tweet with all the necessary tweet properties.
+	 */
+	public function __construct( $screen_name, $user_name, $profile_image_url,
+		$profile_image_size, $text, $created_at ) {
 		$this->screen_name = $screen_name;
 		$this->user_name = $user_name;
 		$this->profile_image_url = $profile_image_url;
@@ -19,12 +28,11 @@ class Tweet {
 	}
 
 	/**
-	 * Get human readable timestamp.
+	 * Returns a human readable timestamp.
 	 *
-	 * @access public
-	 * @return string Human readable timestamp
+	 * @return string
 	 */
-	public function get_date() {
+	public function get_time_ago() {
 		return sprintf( __( 'about %s ago', 'bb-twitterfeed' ),
 			human_time_diff(
 				strtotime( $this->created_at ),
@@ -34,37 +42,38 @@ class Tweet {
 	}
 
 	/**
-	 * Get the full URL to the Twitter profile.
+	 * Returns the full URL to the users Twitter profile.
 	 *
-	 * @access public
-	 * @return string Twitter profile URL
+	 * @return string
 	 */
 	public function get_profile_url() {
 		return BBTF_TWITTER_URL . '/' . $this->screen_name;
 	}
 
 	/**
-	 * Gets the Twitter profile image with the correct size.
+	 * Returns the Twitter profile image with the correct size.
 	 *
-	 * @access public
-	 * @return string $url URL to Twitter profile image with requested size
+	 * @return string
 	 */
-	public function get_profile_image_url() {
+	public function get_profile_image_url_with_size() {
 		$url = $this->profile_image_url;
 		$size = $this->profile_image_size;
 
 		switch ( $size ) {
-		case 'original':
-			$url = str_replace( '_normal', '', $url );
-			break;
-		case 'mini':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		case 'bigger':
-			$url = str_replace( 'normal', $size, $url );
-			break;
-		default:
-			break;
+			case 'original':
+				$url = str_replace( '_normal', '', $url );
+				break;
+
+			case 'mini':
+				$url = str_replace( 'normal', $size, $url );
+				break;
+
+			case 'bigger':
+				$url = str_replace( 'normal', $size, $url );
+				break;
+
+			default:
+				break;
 		}
 
 		return $url;
@@ -73,8 +82,7 @@ class Tweet {
 	/**
 	 * Replaces hashtag and username with links.
 	 *
-	 * @access public
-	 * @return string $text The tweets text
+	 * @return string
 	 */
 	public function filter_text() {
 		$text = htmlEscapeAndLinkUrls( $this->text );
