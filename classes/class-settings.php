@@ -62,8 +62,8 @@ class Settings {
 	 */
 	public function get_credentials() {
 		return [
-			get_option( 'twitterfeed-key' ),
-			get_option( 'twitterfeed-secret' )
+			'consumer_key'    => get_option( 'twitterfeed-key' ),
+			'consumer_secret' => get_option( 'twitterfeed-secret' )
 		];
 	}
 

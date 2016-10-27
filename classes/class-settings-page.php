@@ -7,9 +7,6 @@ namespace Twitterfeed;
  */
 class Settings_Page {
 
-	public $key;
-	public $secret;
-
 	public $key_input = 'twitterfeed-key';
 	public $secret_input = 'twitterfeed-secret';
 
@@ -75,12 +72,12 @@ class Settings_Page {
 	 * secret.
 	 */
 	public function process_post() {
-		if ( isset( $_POST[ $this->key_input ] ) ) {
-			update_option( $this->key_input, $_POST[ $this->key_input ] );
+		if ( isset( $_POST[ 'twitterfeed-key' ] ) ) {
+			update_option( $this->key_input, $_POST[ 'twitterfeed-key' ] );
 		}
 
-		if ( isset( $_POST[ $this->secret_input ] ) ) {
-			update_option( $this->secret_input, $_POST[ $this->secret_input ] );
+		if ( isset( $_POST[ 'twitterfeed-secret' ] ) ) {
+			update_option( $this->secret_input, $_POST[ 'twitterfeed-secret' ] );
 		}
 	}
 
