@@ -47,6 +47,8 @@ The output looks something like this:
 
 ## 0.4
 - Put  API credentials in a WP admin setting
-- Use caching to save tweets
 - Shortcode support
+
+## 0.5
 - Make classes replaceable with custom classes
+- Use caching to save tweets
