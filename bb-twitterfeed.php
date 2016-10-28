@@ -3,7 +3,7 @@
  * Plugin Name: BB Twitterfeed
  * Plugin URI:  https://github.com/baardbaard/bb-twitterfeed
  * Description: Gives you a minimal Twitter feed.
- * Version:     0.3
+ * Version:     0.4
  * Author:      Stef Thoen
  * Author URI:  http://www.baardbaard.nl
  * Text Domain: bb-twitterfeed
