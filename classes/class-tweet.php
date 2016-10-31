@@ -7,6 +7,7 @@ namespace Twitterfeed;
  */
 class Tweet {
 
+    const TWITTER_URL = 'https://www.twitter.com';
 	public $screen_name;
 	public $user_name;
 	public $profile_image_size;
@@ -47,7 +48,7 @@ class Tweet {
 	 * @return string
 	 */
 	public function get_profile_url() {
-		return BBTF_TWITTER_URL . '/' . $this->screen_name;
+		return self::TWITTER_URL . '/' . $this->screen_name;
 	}
 
 	/**
@@ -88,11 +89,11 @@ class Tweet {
 		$text = htmlEscapeAndLinkUrls( $this->text );
 
 		$pattern_username = '/@([a-zA-z0-9]+)/';
-		$replacement_username = '<a href="' . BBTF_TWITTER_URL  . '/${1}">@${1}</a>';
+		$replacement_username = '<a href="' . self::TWITTER_URL  . '/${1}">@${1}</a>';
 		$text = preg_replace( $pattern_username, $replacement_username, $text );
 
 		$pattern_hashtag = '/#([a-zA-z0-9]+)/';
-		$replacement_hashtag = '<a href="' . BBTF_TWITTER_URL . '/hashtag/${1}">#${1}</a>';
+		$replacement_hashtag = '<a href="' . self::TWITTER_URL . '/hashtag/${1}">#${1}</a>';
 		$text = preg_replace( $pattern_hashtag, $replacement_hashtag, $text );
 
 		return $text;
