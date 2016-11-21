@@ -2,8 +2,6 @@
 
 namespace Twitterfeed;
 
-use Mustache_Engine;
-use Mustache_Loader_FilesystemLoader;
 use Wp_Twitter_Api;
 
 /**
@@ -19,7 +17,7 @@ class Twitterfeed {
 	private $profile_image_size;
 
 	private $twitter_error;
-	private $mustache;
+	private $template_engine;
 	private $settings;
 
 	/**
@@ -42,17 +40,16 @@ class Twitterfeed {
 	public function __construct() {
 		$this->number_of_tweets = 5;
 		$this->profile_image_size = 'normal';
-
-		$this->mustache = new Mustache_Engine( [
-			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views' ),
-			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . '/views/partials' ),
+		$this->template_engine = new Mustache_Template_Engine( [
+			'main' => '/views',
+			'partials' => '/views/partials'
 		] );
 
 		new I18n();
 		$this->shortcode = new Shortcode( $this );
-		$this->twitter_error = new Twitter_Error( $this->mustache );
+		$this->twitter_error = new Twitter_Error( $this->template_engine );
 
-		$this->settings = new Settings( new Settings_Page, $this->mustache );
+		$this->settings = new Settings( new Settings_Page, $this->template_engine );
 		$this->settings->init();
 	}
 
@@ -134,7 +131,7 @@ class Twitterfeed {
 	 * @return string
 	 */
 	private function get_list( Tweets $tweets ) {
-		return $this->mustache->render( 'tweets', $tweets );
+		return $this->template_engine->render( 'tweets', $tweets );
 	}
 
 	/**

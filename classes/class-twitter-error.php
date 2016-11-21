@@ -3,8 +3,6 @@
 namespace Twitterfeed;
 
 use WP_Error;
-use Mustache_Engine;
-use Mustache_Loader_FilesystemLoader;
 
 /**
  * Wrapper around the WP_Error class.
@@ -14,7 +12,7 @@ class Twitter_Error {
 	public $errors;
 	public $error_messages;
 	public $heading;
-	private $mustache;
+	private $tempate_engine;
 
 	/**
 	 * Creates an instance of Twitter_Error and assigns a Mustache template for
@@ -22,9 +20,9 @@ class Twitter_Error {
 	 *
 	 * @param Mustache_Engine $mustache
 	 */
-	public function __construct( Mustache_Engine $mustache ) {
+	public function __construct( Template_Engine $template_engine ) {
 		$this->errors = new WP_Error;
-		$this->mustache = $mustache;
+		$this->template_engine = $template_engine;
 		$this->heading = __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' );
 	}
 
@@ -45,7 +43,7 @@ class Twitter_Error {
 		$this->error_messages = $this->errors->get_error_messages();
 
 		if ( !empty ( $this->error_messages ) ) {
-			echo $this->mustache->render( 'errors', $this );
+			echo $this->template_engine->render( 'errors', $this );
 		}
 	}
 }
