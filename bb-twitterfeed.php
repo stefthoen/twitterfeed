@@ -27,7 +27,9 @@ namespace Twitterfeed;
 
 use Twitterfeed\Twitterfeed;
 
-require_once( 'vendor/autoload.php' );
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require __DIR__ . '/vendor/autoload.php';
+}
 
 if ( ! defined( 'BBTF_PATH' ) ) {
 	define( 'BBTF_PATH', plugin_dir_path( __FILE__ ) );
