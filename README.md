@@ -2,32 +2,33 @@
 
 BB-Twitterfeed is a WordPress plugin that gives you a Twitter feed without any styling.
 
-It uses [Twitter-API-1.1-Client-for-Wordpress](https://github.com/micc83/Twitter-API-1.1-Client-for-Wordpress/blob/master/class-wp-twitter-api.php) to connect to the Twitter api and uses [kwi-urllinker](https://bitbucket.org/kwi/urllinker) to find URL's in the tweets and turn them into links.
+It uses [Twitter-API-1.1-Client-for-Wordpress](https://github.com/micc83/Twitter-API-1.1-Client-for-Wordpress/blob/master/class-wp-twitter-api.php) to connect to the Twitter API and uses [kwi-urllinker](https://bitbucket.org/kwi/urllinker) to find URL's in the tweets and turn them into links. It uses Mustache to render te templates.
 
-1. Create a Twitter app and get credentials at [https://dev.twitter.com/apps](https://dev.twitter.com/apps).
-2. Run `composer install` in the root folder of this plugin.
+1. Install this plugin with Composer by running `composer require
+   baardbaard/bb-twitterfeed` or add it to your project's `composer.json`. You
+   can also download it and run `composer install` in the `bb-twitterfeed`
+   plugin's folder.
+2. Create a Twitter app and get your credentials at [https://dev.twitter.com/apps](https://dev.twitter.com/apps).
 3. Enter your Twitter key and secret in the WordPress Dashboard: Settings > BB-Twitterfeed.
 4. Add and activate the plugin and use the following code in your template:
 
 ```
 <?php 
-$args = array(
+$twitterfeed->create_feed( array(
 	'user' => 'baardbaard',
 	'number_of_tweets' => 5, // optional
 	'profile_image_size' => 'mini|normal|bigger|original', // optional, normal = default
-);
-
-$twitterfeed->create_feed( $args );
+) );
 ?>
 ```
 
 Or you can also use the shortcode:
 ```
 // Add this to your page/post/widget in your WYSIWYG editor.
-[twitterfeed user="cnn" number_of_tweets="3" profile_image_size="bigger"]
+[twitterfeed user="baardbaard" number_of_tweets="3" profile_image_size="bigger"]
 
 // Or use this in your template files.
-echo do_shortcode( '[twitterfeed user="cnn" number_of_tweets="3" profile_image_size="bigger"]' );
+echo do_shortcode( '[twitterfeed user="baardbaard" number_of_tweets="3" profile_image_size="bigger"]' );
 ```
 
 The output looks something like this:
@@ -45,6 +46,8 @@ The output looks something like this:
 
 # Roadmap
 
-## 0.5
-- Make classes replaceable with custom classes
+
+## 0.6
+- Make CSS classes replaceable with custom classes
 - Use caching to save tweets
+- Rewrite to use PSR-2

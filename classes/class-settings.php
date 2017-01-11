@@ -2,9 +2,6 @@
 
 namespace Twitterfeed;
 
-use Mustache_Engine;
-use Mustache_Loader_FilesystemLoader;
-
 /**
  * Handles settings and creates a WordPress dashboard settings page where user
  * can enter Twitter API key and secret.
@@ -12,17 +9,17 @@ use Mustache_Loader_FilesystemLoader;
 class Settings {
 
     private $settings_page;
-	private $mustache;
+	private $template_engine;
 
 	/*
 	 * Creates a Settings object with a WordPress Admin settings page.
 	 *
 	 * @param Settings_Page $settings_page
-	 * @param Mustache_Engine $mustache
+	 * @param Template_Engine $template
 	 */
-	public function __construct( Settings_Page $settings_page, Mustache_Engine $mustache ) {
+	public function __construct( Settings_Page $settings_page, Template_Engine $template_engine ) {
 		$this->settings_page = $settings_page;
-		$this->mustache = $mustache;
+		$this->template_engine = $template_engine;
 	}
 
 	/**
@@ -47,15 +44,6 @@ class Settings {
 	}
 
 	/**
-	 * Renders the contents of the page associated with the settings that
-	 * invokes the render method. In the context of this plugin, this is the
-	 * Settings_Page class.
-	 */
-	public function render() {
-		echo $this->mustache->render( 'settings', $this->settings_page );
-	}
-
-	/**
 	 * Returns Twitter API credentials.
 	 *
 	 * @return array
@@ -65,6 +53,15 @@ class Settings {
 			'consumer_key'    => get_option( 'twitterfeed-key' ),
 			'consumer_secret' => get_option( 'twitterfeed-secret' )
 		];
+	}
+
+	/**
+	 * Renders the contents of the page associated with the settings that
+	 * invokes the render method. In the context of this plugin, this is the
+	 * Settings_Page class.
+	 */
+	public function render() {
+		echo $this->template_engine->render( 'settings', $this->settings_page );
 	}
 
 }
