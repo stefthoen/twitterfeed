@@ -14,7 +14,7 @@
 	],
 	"require": {
 		"php": ">=5.4",
-		"kwi/urllinker": "@dev",
+		"baardbaard/urllinker": "0.1",
 		"mustache/mustache": "^2.11"
 	},
 	"require-dev": {

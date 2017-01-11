@@ -1,6 +1,0 @@
-repo: facde202688390d5e93f6ced27063241c521de5f
-node: b5e097f03963454b4e8f32581265c8e57c3409e6
-branch: default
-latesttag: null
-latesttagdistance: 42
-changessincelatesttag: 42
