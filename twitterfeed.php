@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: BB Twitterfeed
- * Plugin URI:  https://github.com/baardbaard/bb-twitterfeed
+ * Plugin Name: Twitterfeed
+ * Plugin URI:  https://github.com/baardbaard/twitterfeed
  * Description: Gives you a minimal Twitter feed.
  * Version:     0.5
  * Author:      Stef Thoen
  * Author URI:  http://www.baardbaard.nl
- * Text Domain: bb-twitterfeed
+ * Text Domain: twitterfeed
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path: /languages/
@@ -31,8 +31,8 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
 
-if ( ! defined( 'BBTF_PATH' ) ) {
-	define( 'BBTF_PATH', plugin_dir_path( __FILE__ ) );
+if ( ! defined( 'TF_PATH' ) ) {
+	define( 'TF_PATH', plugin_dir_path( __FILE__ ) );
 }
 
 $twitterfeed = new Twitterfeed();

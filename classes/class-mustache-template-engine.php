@@ -11,8 +11,8 @@ class Mustache_Template_Engine implements Template_Engine {
 
     public function __construct( $views ) {
 		$this->template_engine = new Mustache_Engine( [
-			'loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . $views['main'] ),
-			'partials_loader' => new Mustache_Loader_FilesystemLoader( BBTF_PATH . $views['partials'] ),
+			'loader' => new Mustache_Loader_FilesystemLoader( TF_PATH . $views['main'] ),
+			'partials_loader' => new Mustache_Loader_FilesystemLoader( TF_PATH . $views['partials'] ),
 		] );
     }
 

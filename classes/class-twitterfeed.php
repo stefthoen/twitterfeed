@@ -78,11 +78,11 @@ class Twitterfeed {
 		$twitter_api = new Wp_Twitter_Api( $credentials );
 
 		if ( empty( $credentials ) ) {
-			$this->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'bb-twitterfeed' ) );
+			$this->twitter_error->add( 'credentials', __( 'No Twitter API credentials provided.', 'twitterfeed' ) );
 		}
 
 		if ( empty( $this->user ) ) {
-			$this->twitter_error->add( 'username', __( 'No username provided.', 'bb-twitterfeed' ) );
+			$this->twitter_error->add( 'username', __( 'No username provided.', 'twitterfeed' ) );
 		}
 
 		$query = sprintf( 'count=%d&include_entities=true&include_rts=true&exclude_replies=true&screen_name=%s',
@@ -93,7 +93,7 @@ class Twitterfeed {
 		$tweets = $twitter_api->query( $query );
 
 		if ( empty( $tweets ) ) {
-			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'bb-twitterfeed' ) );
+			$this->twitter_error->add( 'notweets', __( 'No tweets available.', 'twitterfeed' ) );
 
 			return false;
 		}

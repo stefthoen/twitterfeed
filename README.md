@@ -1,6 +1,6 @@
-# BB-Twitterfeed
+# Twitterfeed
 
-BB-Twitterfeed is a WordPress plugin that gives you a Twitter feed without any
+Twitterfeed is a WordPress plugin that gives you a Twitter feed without any
 styling.
 
 It uses
@@ -26,7 +26,7 @@ and turn them into links. It uses Mustache to render te templates.
 2. Create a Twitter app and get your credentials at
    [https://dev.twitter.com/apps](https://dev.twitter.com/apps).
 3. Enter your Twitter key and secret in the WordPress Dashboard: Settings >
-   BB-Twitterfeed.
+   Twitterfeed.
 4. Add and activate the plugin and use the following code in your template:
 
 ```

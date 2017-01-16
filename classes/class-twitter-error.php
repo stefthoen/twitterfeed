@@ -23,7 +23,7 @@ class Twitter_Error {
 	public function __construct( Template_Engine $template_engine ) {
 		$this->errors = new WP_Error;
 		$this->template_engine = $template_engine;
-		$this->heading = __( 'Oops, something went wrong. Please rectify these errors.', 'bb-twitterfeed' );
+		$this->heading = __( 'Oops, something went wrong. Please rectify these errors.', 'twitterfeed' );
 	}
 
 	/**

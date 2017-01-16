@@ -18,8 +18,8 @@ class Settings_Page {
 	 * settings page with a Mustache template.
 	 */
 	public function __construct() {
-		$this->key_label = __( 'Add your Twitter API consumer key', 'bb-twitterfeed' );
-		$this->secret_label = __( 'Add your Twitter API consumer secret', 'bb-twitterfeed' );
+		$this->key_label = __( 'Add your Twitter API consumer key', 'twitterfeed' );
+		$this->secret_label = __( 'Add your Twitter API consumer secret', 'twitterfeed' );
 	}
 
 	/**

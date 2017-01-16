@@ -22,6 +22,6 @@ class I18n {
 	 * Load the plugin's translated strings.
 	 */
 	public function load_textdomain() {
-		load_plugin_textdomain( 'bb-twitterfeed', false, plugin_basename( BBTF_PATH ) . '/languages/' );
+		load_plugin_textdomain( 'twitterfeed', false, plugin_basename( TF_PATH ) . '/languages/' );
 	}
 }
