@@ -1,4 +1,9 @@
 <?php
+/**
+ * Settings_Page class
+ *
+ * @package twitterfeed
+ */
 
 namespace Twitterfeed;
 

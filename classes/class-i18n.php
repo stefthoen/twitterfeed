@@ -1,12 +1,21 @@
 <?php
+/**
+ * Internatiolisation: I18n class
+ *
+ * @package Twitterfeed
+ * @since 0.5
+ */
 
 namespace Twitterfeed;
 
 /**
- * Handles internatiolisation of the plugin.
+ * I18n
  */
 class I18n {
 
+	/**
+	 * Constructor
+	 */
 	public function __construct() {
 		$this->init();
 	}
@@ -24,4 +33,5 @@ class I18n {
 	public function load_textdomain() {
 		load_plugin_textdomain( 'twitterfeed', false, plugin_basename( TF_PATH ) . '/languages/' );
 	}
+
 }
