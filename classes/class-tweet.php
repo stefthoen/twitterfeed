@@ -1,4 +1,10 @@
 <?php
+/**
+ * Tweet class
+ *
+ * @package twitterfeed
+ * @since 0.5
+ */
 
 namespace Twitterfeed;
 
@@ -7,7 +13,7 @@ namespace Twitterfeed;
  */
 class Tweet {
 
-    const TWITTER_URL = 'https://www.twitter.com';
+	const TWITTER_URL = 'https://www.twitter.com';
 	public $screen_name;
 	public $user_name;
 	public $profile_image_size;
@@ -17,6 +23,13 @@ class Tweet {
 
 	/**
 	 * Creates a Tweet with all the necessary tweet properties.
+	 *
+	 * @param string   $screen_name Tweet user's screen name.
+	 * @param string   $user_name User's name.
+	 * @param string   $profile_image_url User's profile image url.
+	 * @param string   $profile_image_size User's profile image size.
+	 * @param string   $text Tweet's text.
+	 * @param DateTime $created_at Tweets creation date and time.
 	 */
 	public function __construct( $screen_name, $user_name, $profile_image_url,
 		$profile_image_size, $text, $created_at ) {
@@ -34,6 +47,7 @@ class Tweet {
 	 * @return string
 	 */
 	public function get_time_ago() {
+		// translators: Human readable timestamp, ex. "about 1 day ago".
 		return sprintf( __( 'about %s ago', 'twitterfeed' ),
 			human_time_diff(
 				strtotime( $this->created_at ),
@@ -89,7 +103,7 @@ class Tweet {
 		$text = htmlEscapeAndLinkUrls( $this->text );
 
 		$pattern_username = '/@([a-zA-z0-9]+)/';
-		$replacement_username = '<a href="' . self::TWITTER_URL  . '/${1}">@${1}</a>';
+		$replacement_username = '<a href="' . self::TWITTER_URL . '/${1}">@${1}</a>';
 		$text = preg_replace( $pattern_username, $replacement_username, $text );
 
 		$pattern_hashtag = '/#([a-zA-z0-9]+)/';

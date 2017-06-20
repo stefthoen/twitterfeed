@@ -77,12 +77,12 @@ class Settings_Page {
 	 * secret.
 	 */
 	public function process_post() {
-		if ( isset( $_POST[ 'twitterfeed-key' ] ) ) {
-			update_option( $this->key_input, $_POST[ 'twitterfeed-key' ] );
+		if ( isset( $_POST['twitterfeed-key'] ) ) {
+			update_option( $this->key_input, $_POST['twitterfeed-key'] );
 		}
 
-		if ( isset( $_POST[ 'twitterfeed-secret' ] ) ) {
-			update_option( $this->secret_input, $_POST[ 'twitterfeed-secret' ] );
+		if ( isset( $_POST['twitterfeed-secret'] ) ) {
+			update_option( $this->secret_input, $_POST['twitterfeed-secret'] );
 		}
 	}
 

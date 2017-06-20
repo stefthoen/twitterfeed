@@ -18,11 +18,6 @@ use Mustache_Loader_FilesystemLoader;
  */
 class Mustache_Template_Engine implements Template_Engine {
 
-	/**
-	 * The Mustache Engine that we're using to render the templates.
-	 *
-	 * @var mixed
-	 */
 	private $template_engine;
 
 	/**

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Twitterfeed class
+ *
+ * @package twitterfeed
+ * @since 0.5
+ */
 
 namespace Twitterfeed;
 
@@ -42,7 +48,7 @@ class Twitterfeed {
 		$this->profile_image_size = 'normal';
 		$this->template_engine = new Mustache_Template_Engine( [
 			'main' => '/views',
-			'partials' => '/views/partials'
+			'partials' => '/views/partials',
 		] );
 
 		new I18n();
@@ -56,7 +62,7 @@ class Twitterfeed {
 	/**
 	 * Get users latest tweets and outputs an unordered list.
 	 *
-	 * @param  array $feed_attributes
+	 * @param  array $feed_attributes Twitterfeed's attributes.
 	 */
 	public function create_feed( $feed_attributes ) {
 		$this->set_feed_attributes( $feed_attributes );
@@ -104,7 +110,7 @@ class Twitterfeed {
 	/**
 	 * Convert tweets to an object with an array of tweet objects.
 	 *
-	 * @param  array  $unfiltered_tweets
+	 * @param  array $unfiltered_tweets Array of unfiltered tweets.
 	 * @return Tweets $tweets
 	 */
 	private function filter_tweets( array $unfiltered_tweets ) {
@@ -127,7 +133,7 @@ class Twitterfeed {
 	/**
 	 * Get tweets in a HTML UL element.
 	 *
-	 * @param  Tweets $tweets
+	 * @param  Tweets $tweets Collection of tweets.
 	 * @return string
 	 */
 	private function get_list( Tweets $tweets ) {
@@ -137,7 +143,8 @@ class Twitterfeed {
 	/**
 	 * Set the Twitter API attributes that we use to query the Twitter API.
 	 *
-	 * @param  array $feed_attributes
+	 * @param  array $feed_attributes Twitterfeed's attributes that are need for
+	 *                                initialisation.
 	 */
 	private function set_feed_attributes( array $feed_attributes ) {
 		foreach ( $feed_attributes as $key => $value ) {

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Settings class
+ *
+ * @package Twitterfeed
+ * @since 0.5
+ */
 
 namespace Twitterfeed;
 
@@ -8,14 +14,15 @@ namespace Twitterfeed;
  */
 class Settings {
 
-    private $settings_page;
+	private $settings_page;
 	private $template_engine;
 
-	/*
+	/**
 	 * Creates a Settings object with a WordPress Admin settings page.
 	 *
-	 * @param Settings_Page $settings_page
-	 * @param Template_Engine $template
+	 * @param Settings_Page   $settings_page   Settings page that gives context
+	 *                                         to the setting template.
+	 * @param Template_Engine $template_engine Settings template.
 	 */
 	public function __construct( Settings_Page $settings_page, Template_Engine $template_engine ) {
 		$this->settings_page = $settings_page;
@@ -51,7 +58,7 @@ class Settings {
 	public function get_credentials() {
 		return [
 			'consumer_key'    => get_option( 'twitterfeed-key' ),
-			'consumer_secret' => get_option( 'twitterfeed-secret' )
+			'consumer_secret' => get_option( 'twitterfeed-secret' ),
 		];
 	}
 
