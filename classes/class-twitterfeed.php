@@ -9,6 +9,7 @@
 namespace Twitterfeed;
 
 use Wp_Twitter_Api;
+use Twitterfeed\Widget\Widget;
 
 /**
  * Twitterfeed

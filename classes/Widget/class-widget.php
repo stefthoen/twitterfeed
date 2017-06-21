@@ -6,26 +6,35 @@
  * @since 0.6
  */
 
-namespace Twitterfeed;
+namespace Twitterfeed\Widget;
+
+use Twitterfeed\Mustache_Template_Engine;
 
 /**
  * Twitterfeed widget for WP widget areas.
  */
 class Widget extends \WP_Widget {
 
+	private $template_engine;
+
 	/**
 	 * Constructor
 	 */
-	public function __construct() {
-		parent::__construct(
-			'twitterfeed',
-			__( 'Twitterfeed', 'twitterfeed' ),
-			[
-				'classname' => 'widget-twitterfeed',
-				'description' => __( 'A widget to show your Twitterfeed.',
-				'twitterfeed' ),
-			]
-		);
+		public function __construct() {
+			$this->template_engine = new Mustache_Template_Engine( [
+				'main' => '/views',
+				'partials' => '/views/partials',
+			] );
+
+			parent::__construct(
+				'twitterfeed',
+				__( 'Twitterfeed', 'twitterfeed' ),
+				[
+					'classname' => 'widget-twitterfeed',
+					'description' => __( 'A widget to show your Twitterfeed.',
+					'twitterfeed' ),
+				]
+			);
 	}
 
 	/**
@@ -39,7 +48,7 @@ class Widget extends \WP_Widget {
 		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 		}
-		echo esc_html__( 'Hello, World!', 'text_domain' );
+		echo esc_html__( $instance['user'] );
 		echo $args['after_widget'];
 	}
 
@@ -47,19 +56,12 @@ class Widget extends \WP_Widget {
 	 * Outputs the options form on admin.
 	 *
 	 * @param array $instance The widget options
-	 * @todo Use Mustache for template stuff
 	 */
 	public function form( $instance ) {
-		$title = ! empty( $instance['title'] )
-			?  $instance['title']
-			: esc_html__( 'New title', 'twitterfeed' );
-
-		?>
-		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:', 'text_domain' ); ?></label>
-		<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-		</p>
-		<?php
+		echo $this->template_engine->render(
+			'widget-form',
+			new Widget_Form( $instance, $this )
+		);
 	}
 
 	/**
@@ -70,8 +72,13 @@ class Widget extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance = [];
+
 		$instance['title'] = ( ! empty( $new_instance['title'] ) )
 			? strip_tags( $new_instance['title'] )
+			: '';
+
+		$instance['user'] = ( ! empty( $new_instance['user'] ) )
+			? strip_tags( $new_instance['user'] )
 			: '';
 
 		return $instance;
@@ -80,5 +87,5 @@ class Widget extends \WP_Widget {
 }
 
 add_action( 'widgets_init', function() {
-	register_widget( 'Twitterfeed\Widget' );
+	register_widget( 'Twitterfeed\Widget\Widget' );
 } );

@@ -25,7 +25,8 @@
   },
   "autoload": {
     "classmap": [
-      "classes/"
+      "classes/",
+      "classes/Widget"
     ]
   }
 }
