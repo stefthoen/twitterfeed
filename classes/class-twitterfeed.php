@@ -52,6 +52,8 @@ class Twitterfeed {
 		] );
 
 		new I18n();
+		new Widget();
+
 		$this->shortcode = new Shortcode( $this );
 		$this->twitter_error = new Twitter_Error( $this->template_engine );
 
