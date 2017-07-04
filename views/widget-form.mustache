@@ -1,8 +1,25 @@
 <p>
 	<label for="{{ get_title_id }}">{{ title_label }}</label>
-	<input class="widefat" id="{{ get_title_id }}" name="{{ get_title_name }}" type="text" value="{{ get_title }}">
+	<input class="widefat" id="{{ get_title_id }}" name="{{ get_title_name }}" type="text" value="{{ title }}">
 </p>
 <p>
 	<label for="{{ get_user_id }}">{{ user_label }}</label>
 	<input class="widefat" id="{{ get_user_id }}" name="{{ get_user_name }}" type="text" value="{{ get_user }}">
+</p>
+<p>
+	<label for="{{ get_number_of_tweets_id }}">{{ number_of_tweets_label }}</label>
+	<input class="widefat" id="{{ get_number_of_tweets_id }}" name="{{ get_number_of_tweets_name }}" type="number" step="1" min="1" max="20" value="{{ get_number_of_tweets }}">
+</p>
+<p>
+	<label for="{{ get_profile_image_size_id }}">{{ profile_image_size_label }}</label>
+	<select class="widefat" id="{{ get_profile_image_size_id }}" name="{{ get_profile_image_size_name }}">
+		{{# get_profile_image_size }}
+		{{# selected }}
+			<option value="{{ value }}" selected="selected">{{ label }}</option>
+		{{/ selected }}
+		{{^ selected }}
+			<option value="{{ value }}">{{ label }}</option>
+		{{/ selected }}
+		{{/ get_profile_image_size }}
+	</select>
 </p>

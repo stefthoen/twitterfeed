@@ -9,6 +9,7 @@
 namespace Twitterfeed\Widget;
 
 use Twitterfeed\Mustache_Template_Engine;
+use Twitterfeed\Twitterfeed;
 
 /**
  * Twitterfeed widget for WP widget areas.
@@ -20,21 +21,21 @@ class Widget extends \WP_Widget {
 	/**
 	 * Constructor
 	 */
-		public function __construct() {
-			$this->template_engine = new Mustache_Template_Engine( [
-				'main' => '/views',
-				'partials' => '/views/partials',
-			] );
+	public function __construct() {
+		$this->template_engine = new Mustache_Template_Engine( [
+			'main' => '/views',
+			'partials' => '/views/partials',
+		] );
 
-			parent::__construct(
-				'twitterfeed',
-				__( 'Twitterfeed', 'twitterfeed' ),
-				[
-					'classname' => 'widget-twitterfeed',
-					'description' => __( 'A widget to show your Twitterfeed.',
-					'twitterfeed' ),
-				]
-			);
+		parent::__construct(
+			'twitterfeed',
+			__( 'Twitterfeed', 'twitterfeed' ),
+			[
+				'classname' => 'widget-twitterfeed',
+				'description' => __( 'A widget to show your Twitterfeed.',
+				'twitterfeed' ),
+			]
+		);
 	}
 
 	/**
@@ -48,7 +49,12 @@ class Widget extends \WP_Widget {
 		if ( ! empty( $instance['title'] ) ) {
 			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 		}
-		echo esc_html__( $instance['user'] );
+		global $twitterfeed;
+		$twitterfeed->create_feed([
+			'user' => $instance['user'],
+			'number_of_tweets' => $instance['number_of_tweets'],
+			'profile_image_size' => $instance['profile_image_size'],
+		]);
 		echo $args['after_widget'];
 	}
 
@@ -72,17 +78,26 @@ class Widget extends \WP_Widget {
 	 */
 	public function update( $new_instance, $old_instance ) {
 		$instance = [];
+		$options = [
+			'title',
+			'user',
+			'number_of_tweets',
+			'profile_image_size'
+		];
 
-		$instance['title'] = ( ! empty( $new_instance['title'] ) )
-			? strip_tags( $new_instance['title'] )
-			: '';
-
-		$instance['user'] = ( ! empty( $new_instance['user'] ) )
-			? strip_tags( $new_instance['user'] )
-			: '';
+		foreach ($options as $option) {
+			$instance[$option] = ( ! empty( $new_instance[$option] ) )
+				? strip_tags( $new_instance[$option] )
+				: '';
+		}
 
 		return $instance;
 	}
+
+	/* public function create_feed( Twitterfeed $twitterfeed ) { */
+	/* 	$twitterfeed->create_feed([ */
+	/* 	]); */
+	/* } */
 
 }
 

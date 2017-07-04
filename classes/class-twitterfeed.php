@@ -53,7 +53,8 @@ class Twitterfeed {
 		] );
 
 		new I18n();
-		new Widget();
+		$this->widget = new Widget( $this );
+		/* $this->widget->create_feed($this); */
 
 		$this->shortcode = new Shortcode( $this );
 		$this->twitter_error = new Twitter_Error( $this->template_engine );
